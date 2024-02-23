@@ -423,7 +423,7 @@ class Datakaryawan extends CI_Controller
         $percobaan_akhir    = explode('||', $kar['TXT_KONTRAK_PERCOBAAN'])[1];
 
         $kontrak_1_awal     = explode('||', $kar['TXT_KONTRAK_1'])[0];
-        $kontrak_1_akhir    = explode('||', $kar['TXT_KONTRAK_1'])[0];
+        $kontrak_1_akhir    = explode('||', $kar['TXT_KONTRAK_1'])[1];
 
         $kontrak_2_awal     = explode('||', $kar['TXT_KONTRAK_2'])[0];
         $kontrak_2_akhir    = explode('||', $kar['TXT_KONTRAK_2'])[1];
@@ -709,14 +709,15 @@ class Datakaryawan extends CI_Controller
                 $idkaryawan = $this->input->post('id');
                 // ambil data karyawan 
                 $kar = $this->db->get_where('tb_user', ['user_id' => $idkaryawan])->row_array();
-                $percobaan_awal     = strtotime(explode('||', $kar['TXT_KONTRAK_PERCOBAAN'])[0]);
-                $percobaan_akhir    = strtotime(explode('||', $kar['TXT_KONTRAK_PERCOBAAN'])[1]);
 
-                $kontrak_1_awal     = strtotime(explode('||', $kar['TXT_KONTRAK_1'])[0]);
-                $kontrak_1_akhir    = strtotime(explode('||', $kar['TXT_KONTRAK_1'])[0]);
+                $percobaan_awal     = ($kar['TXT_KONTRAK_PERCOBAAN']) ? strtotime(explode('||', $kar['TXT_KONTRAK_PERCOBAAN'])[0]) : "";
+                $percobaan_akhir    = ($kar['TXT_KONTRAK_PERCOBAAN']) ? strtotime(explode('||', $kar['TXT_KONTRAK_PERCOBAAN'])[1]) : "";
 
-                $kontrak_2_awal     = strtotime(explode('||', $kar['TXT_KONTRAK_2'])[0]);
-                $kontrak_2_akhir    = strtotime(explode('||', $kar['TXT_KONTRAK_2'])[1]);
+                $kontrak_1_awal     = ($kar['TXT_KONTRAK_1']) ? strtotime(explode('||', $kar['TXT_KONTRAK_1'])[0]) : "";
+                $kontrak_1_akhir    = ($kar['TXT_KONTRAK_1']) ? strtotime(explode('||', $kar['TXT_KONTRAK_1'])[1]) : "";
+
+                $kontrak_2_awal     = ($kar['TXT_KONTRAK_2']) ? strtotime(explode('||', $kar['TXT_KONTRAK_2'])[0]) : "";
+                $kontrak_2_akhir    = ($kar['TXT_KONTRAK_2']) ? strtotime(explode('||', $kar['TXT_KONTRAK_2'])[1]) : "";
 
                 $kontrak_3_awal     = strtotime(explode('||', $kar['TXT_KONTRAK_3'])[0]);
                 $kontrak_3_akhir    = strtotime(explode('||', $kar['TXT_KONTRAK_3'])[1]);
@@ -734,9 +735,9 @@ class Datakaryawan extends CI_Controller
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Kontrak 1</label>
                 <div class="col-sm-4"><input type="date" name="kontrak-1-awal-edit" id="kontrak-1-awal-edit"
-                        placeholder="Awal" class="form-control" value=""></div>
+                        placeholder="Awal" class="form-control" value="' . date("Y-m-d", $kontrak_1_awal) . '"></div>
                 <div class="col-sm-4"><input type="date" name="kontrak-1-akhir-edit" id="kontrak-1-akhir-edit"
-                        placeholder="Akhir" class="form-control" value=""></div>
+                        placeholder="Akhir" class="form-control" value="' . date("Y-m-d", $kontrak_1_akhir) . '"></div>
                 <div class="col-sm-2"><button class="btn btn-block btn-secondary reset-kontrak-1">reset</button></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Kontrak 2</label>
