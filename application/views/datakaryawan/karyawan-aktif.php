@@ -396,7 +396,9 @@
                     const id = $(this).data('id');
                     const urlHapus = "<?= base_url('datakaryawan/nonaktifkanKaryawan') ?>";
                     Swal.fire({
-                        title: "Masukkan tanggal Resign",
+                        title: "Nonaktifkan",
+                        text: 'Silahkan input tgl resign terlebih dahulu',
+                        icon: 'question',
                         input: "date",
                         inputAttributes: {
                             autocapitalize: "off"
@@ -470,7 +472,7 @@
                         .then(function(data) {
                             $('#formDetail').modal('show');
                             $('#detailForm').html(data);
-                            console.log(data);
+                            // console.log(data);
                         })
                         .catch(function(error) {
                             console.log('Error:', error);

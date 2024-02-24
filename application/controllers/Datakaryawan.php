@@ -293,7 +293,7 @@ class Datakaryawan extends CI_Controller
                 $hasil_jarak_tanggal_Kontrak_5 = ($end_date_Kontrak_5 - $start_date_Kontrak_5) / 60 / 60 / 24;
                 if ($hasil_jarak_tanggal_Kontrak_5 >= 0 && $hasil_jarak_tanggal_Kontrak_5 <= 30) {
                     $statusKontrak5 = "<span id='bahaya' class='m-1'>(K5H)</span>";
-                } else if ($hasil_jarak_tanggal_Kontrak_5 < 0) {
+                } else if ($hasil_jarak_tanggal_Kontrak_5 <= 0) {
                     $statusKontrak5 = "<span id='lewat' class='m-1'>(K5L)</span>";
                 }
             } else {
@@ -703,6 +703,7 @@ class Datakaryawan extends CI_Controller
 
         if ($this->form_validation->run() == FALSE) {
             # code...
+            $divs = $this->db->get('tb_divisi');
             $output = '';
             if ($this->input->post('id')) {
                 error_reporting(0);
@@ -719,14 +720,17 @@ class Datakaryawan extends CI_Controller
                 $kontrak_2_awal     = ($kar['TXT_KONTRAK_2']) ? strtotime(explode('||', $kar['TXT_KONTRAK_2'])[0]) : "";
                 $kontrak_2_akhir    = ($kar['TXT_KONTRAK_2']) ? strtotime(explode('||', $kar['TXT_KONTRAK_2'])[1]) : "";
 
-                $kontrak_3_awal     = strtotime(explode('||', $kar['TXT_KONTRAK_3'])[0]);
-                $kontrak_3_akhir    = strtotime(explode('||', $kar['TXT_KONTRAK_3'])[1]);
+                $kontrak_3_awal     = ($kar['TXT_KONTRAK_3']) ? strtotime(explode('||', $kar['TXT_KONTRAK_3'])[0]) : "";
+                $kontrak_3_akhir    = ($kar['TXT_KONTRAK_3']) ? strtotime(explode('||', $kar['TXT_KONTRAK_3'])[1]) : "";
 
-                $kontrak_4_awal     = strtotime(explode('||', $kar['TXT_KONTRAK_4'])[0]);
-                $kontrak_4_akhir    = strtotime(explode('||', $kar['TXT_KONTRAK_4'])[1]);
+                $kontrak_4_awal     = ($kar['TXT_KONTRAK_4']) ? strtotime(explode('||', $kar['TXT_KONTRAK_4'])[0]) : "";
+                $kontrak_4_akhir    = ($kar['TXT_KONTRAK_4']) ? strtotime(explode('||', $kar['TXT_KONTRAK_4'])[1]) : "";
 
-                $kontrak_5_awal     = strtotime(explode('||', $kar['TXT_KONTRAK_5'])[0]);
-                $kontrak_5_akhir    = strtotime(explode('||', $kar['TXT_KONTRAK_5'])[1]);
+                $kontrak_5_awal     = ($kar['TXT_KONTRAK_5']) ? strtotime(explode('||', $kar['TXT_KONTRAK_5'])[0]) : "";
+                $kontrak_5_akhir    = ($kar['TXT_KONTRAK_5']) ? strtotime(explode('||', $kar['TXT_KONTRAK_5'])[1]) : "";
+
+                $tglResign          = ($kar['DATE_TANGGAL_RESIGN']) ? strtotime($kar['DATE_TANGGAL_RESIGN']) : "";
+                $tglStartKerja      = ($kar['tgl_mulai_bekerja']) ? strtotime($kar['tgl_mulai_bekerja']) : "";
 
                 $output .= '<div class="form-group  row"><label class="col-sm-2 col-form-label"> Percobaan</label>
                 <div class="col-sm-4"><input type="date" name="kontrak-percobaan-awal-edit" id="kontrak-percobaan-awal-edit" class="form-control" value="' . date("Y-m-d", $percobaan_awal) . '"></div>
@@ -742,152 +746,142 @@ class Datakaryawan extends CI_Controller
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Kontrak 2</label>
                 <div class="col-sm-4"><input type="date" name="kontrak-2-awal-edit" id="kontrak-2-awal-edit"
-                        placeholder="Awal" class="form-control" value=""></div>
+                        placeholder="Awal" class="form-control" value="' . date("Y-m-d", $kontrak_2_awal) . '"></div>
                 <div class="col-sm-4"><input type="date" name="kontrak-2-akhir-edit" id="kontrak-2-akhir-edit"
-                        placeholder="Akhir" class="form-control" value=""></div>
+                        placeholder="Akhir" class="form-control" value="' . date("Y-m-d", $kontrak_2_akhir) . '"></div>
                 <div class="col-sm-2"><button class="btn btn-block btn-secondary reset-kontrak-2">reset</button></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Kontrak 3</label>
                 <div class="col-sm-4"><input type="date" name="kontrak-3-awal-edit" id="kontrak-3-awal-edit"
-                        placeholder="Awal" class="form-control" value=""></div>
+                        placeholder="Awal" class="form-control" value="' . date("Y-m-d", $kontrak_3_awal) . '"></div>
                 <div class="col-sm-4"><input type="date" name="kontrak-3-akhir-edit" id="kontrak-3-akhir-edit"
-                        placeholder="Akhir" class="form-control" value=""></div>
+                        placeholder="Akhir" class="form-control" value="' . date("Y-m-d", $kontrak_3_akhir) . '"></div>
                 <div class="col-sm-2"><button class="btn btn-block btn-secondary reset-kontrak-3">reset</button></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Kontrak 4</label>
                 <div class="col-sm-4"><input type="date" name="kontrak-4-awal-edit" id="kontrak-4-awal-edit"
-                        placeholder="Awal" class="form-control" value=""></div>
+                        placeholder="Awal" class="form-control" value="' . date("Y-m-d", $kontrak_4_awal) . '"></div>
                 <div class="col-sm-4"><input type="date" name="kontrak-4-akhir-edit" id="kontrak-4-akhir-edit"
-                        placeholder="Akhir" class="form-control" value=""></div>
+                        placeholder="Akhir" class="form-control" value="' . date("Y-m-d", $kontrak_4_akhir) . '"></div>
                 <div class="col-sm-2"><button class="btn btn-block btn-secondary reset-kontrak-4">reset</button></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Kontrak 5</label>
                 <div class="col-sm-4"><input type="date" name="kontrak-5-awal-edit" id="kontrak-5-awal-edit"
-                        placeholder="Awal" class="form-control" value=""></div>
+                        placeholder="Awal" class="form-control" value="' . date("Y-m-d", $kontrak_5_awal) . '"></div>
                 <div class="col-sm-4"><input type="date" name="kontrak-5-akhir-edit" id="kontrak-5-akhir-edit"
-                        placeholder="Akhir" class="form-control" value=""></div>
+                        placeholder="Akhir" class="form-control" value="' . date("Y-m-d", $kontrak_5_akhir) . '"></div>
                 <div class="col-sm-2"><button class="btn btn-block btn-secondary reset-kontrak-5">reset</button></div>
+            </div>
+            <div class="form-group row">
+                <label for="tgl-mulai-bekerja" class="col-sm-2">Tgl Mulai Bekerja</label>
+                <div class="col-sm-4"><input type="date" class="form-control" name="tgl-mulai-bekerja" id="tgl-mulai-bekerja" value="' . date("Y-m-d", $tglStartKerja) . '"></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Nama</label>
                 <div class="col-sm-10"><input type="text" id="nama-edit" class="form-control" value="' . $kar["TXT_NAMA"] . '"></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Tgl Resign</label>
-                <div class="col-sm-8"><input type="date" id="resign-edit" class="form-control" value=""></div>
+                <div class="col-sm-8"><input type="date" id="resign-edit" class="form-control" value="' . date("Y-m-d", $tglResign) . '"></div>
                 <div class="col-sm-2"><button class="btn btn-block btn-secondary reset-resign">reset</button></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">ID Karyawan</label>
-                <div class="col-sm-10"><input type="text" id="id-karyawan-edit" class="form-control" value=""></div>
+                <div class="col-sm-10"><input type="text" id="id-karyawan-edit" class="form-control" value="' . $kar["absen_id"] . '"></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">No Telepon</label>
-                <div class="col-sm-10"><input type="text" id="telepon-edit" class="form-control" value=""></div>
+                <div class="col-sm-10"><input type="text" id="telepon-edit" class="form-control" value="' . $kar["TXT_TELEPON"] . '"></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Divisi</label>
                 <div class="col-sm-10 " id="divisi-edit-val">
-                    <select id="divisi-edit" data-placeholder="Pilih Karyawan ..."
-                        class="chosen-select form-control" tabindex="2" required>
-                        <option value="">Pilih</option>
-                        <option value="IT">IT</option>
-                        <option value="HRD">HRD</option>
-                        <option value="GUDANG">GUDANG</option>
-                        <option value="ADMINISTRASI">ADMINISTRASI</option>
-                        <option value="SALES & MARKETING">SALES & MARKETING</option>
-                        <option value="TELEMARKETING">TELEMARKETING</option>
-                        <option value="FINANCE, ACCOUNTING & TAX">FINANCE, ACCOUNTING & TAX</option>
-                        <option value="SHOWROOM">SHOWROOM</option>
-                        <option value="DIGITAL MARKETING">DIGITAL MARKETING</option>
-                        <option value="DESIGN">DESIGN</option>
-                        <option value="MARKETING COMMUNICATION">MARKETING COMMUNICATION</option>
-                        <option value="PURCHASING">PURCHASING</option>
-                        <option value="MIS">MIS</option>
-                        <option value="CIBADAK">CIBADAK</option>
-                    </select>
+                    <select id="divisi-edit" data-placeholder="Pilih Karyawan ..." class="chosen-select form-control" tabindex="2" required>
+                        <option value="' . $kar["TXT_DIVISI"] . '">' . $kar["TXT_DIVISI"] . '</option>';
+                foreach ($divs->result() as $row) {
+                    $output .= '<option value="' . $row->nama_divisi . '">' . $row->nama_divisi . '</option>';
+                }
+                $output .= '</select>
                 </div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Status</label>
-                <div class="col-sm-10"><input type="text" id="status-edit" class="form-control" value=""></div>
+                <div class="col-sm-10"><input type="text" id="status-edit" class="form-control" value="' . $kar["TXT_STATUS"] . '"></div>
             </div>
-            <div class="form-group  row"><label class="col-sm-2 col-form-label">alamat</label>
-                <div class="col-sm-10"><input type="text" id="alamat-edit" class="form-control" value=""></div>
+            <div class="form-group  row"><label class="col-sm-2 col-form-label">Alamat</label>
+                <div class="col-sm-10"><input type="text" id="alamat-edit" class="form-control" value="' . $kar["TXT_ALAMAT"] . '"></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Tempat Lahir</label>
-                <div class="col-sm-10"><input type="text" id="tempat-lahir-edit" class="form-control" value="">
+                <div class="col-sm-10"><input type="text" id="tempat-lahir-edit" class="form-control" value="' . $kar["TXT_TEMPAT_LAHIR"] . '">
                 </div>
             </div>
-            <div class="form-group  row"><label class="col-sm-2 col-form-label">hobby</label>
-                <div class="col-sm-10"><input type="text" id="hobby-edit" class="form-control" value=""></div>
+            <div class="form-group  row"><label class="col-sm-2 col-form-label">Hobby</label>
+                <div class="col-sm-10"><input type="text" id="hobby-edit" class="form-control" value="' . $kar["TXT_HOBBY"] . '"></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Agama</label>
-                <div class="col-sm-10"><input type="text" id="agama-edit" class="form-control" value=""></div>
+                <div class="col-sm-10"><input type="text" id="agama-edit" class="form-control" value="' . $kar["TXT_AGAMA"] . '"></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Kelamin</label>
-                <div class="col-sm-10"><input type="text" id="kelamin-edit" class="form-control" value=""></div>
+                <div class="col-sm-10"><input type="text" id="kelamin-edit" class="form-control" value="' . $kar["TXT_KELAMIN"] . '"></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Kebangsaan</label>
-                <div class="col-sm-10"><input type="text" id="kebangsaan-edit" class="form-control" value=""></div>
+                <div class="col-sm-10"><input type="text" id="kebangsaan-edit" class="form-control" value="' . $kar["TXT_KEBANGSAAN"] . '"></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Tanggal Lahir</label>
-                <div class="col-sm-10"><input type="date" id="tanggal-lahir-edit" class="form-control" value="">
+                <div class="col-sm-10"><input type="date" id="tanggal-lahir-edit" class="form-control" value="' . $kar["DATE_TANGGAL_LAHIR"] . '">
                 </div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Nama Kerabat</label>
-                <div class="col-sm-10"><input type="text" id="kerabat-edit" class="form-control" value=""></div>
+                <div class="col-sm-10"><input type="text" id="kerabat-edit" class="form-control" value="' . $kar["TXT_NAMA_KERABAT"] . '"></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Hubungan Kerabat</label>
-                <div class="col-sm-10"><input type="text" id="hubungan-kerabat-edit" class="form-control" value="">
+                <div class="col-sm-10"><input type="text" id="hubungan-kerabat-edit" class="form-control" value="' . $kar["TXT_HUBUNGAN_KRBT"] . '">
                 </div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Alamat & telepon Kerabat</label>
-                <div class="col-sm-10"><input type="text" id="alamat-telp-kerabat-edit" class="form-control"
-                        value=""></div>
+                <div class="col-sm-10"><input type="text" id="alamat-telp-kerabat-edit" class="form-control" value="' . $kar["TXT_ALAMAT_TELP_KRBT"] . '"></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Nama Suami / Istri</label>
-                <div class="col-sm-10"><input type="text" id="nama-suami-istri-edit" class="form-control" value="">
+                <div class="col-sm-10"><input type="text" id="nama-suami-istri-edit" class="form-control" value="' . $kar["TXT_NAMA_SUAMI_ISTRI"] . '">
                 </div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Tempat Lahir Suami / Istri</label>
-                <div class="col-sm-10"><input type="text" id="tempat-lahir-suami-istri-edit" class="form-control"
-                        value=""></div>
+                <div class="col-sm-10"><input type="text" id="tempat-lahir-suami-istri-edit" class="form-control" value="' . $kar["TXT_TEMPAT_LAHIR_SUAMI_ISTRI"] . '"></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Tanggal Lahir Suami / Istri</label>
                 <div class="col-sm-10"><input type="text" id="date-tanggal-lahir-suami-istri-edit"
-                        class="form-control" value=""></div>
+                        class="form-control" value="' . $kar["DATE_TANGGAL_LAHIR_SUAMI_ISTRI"] . '"></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Pekerjaan Suami Istri</label>
                 <div class="col-sm-10"><input type="text" id="pekerjaan-suami-istri-edit" class="form-control"
-                        value=""></div>
+                        value="' . $kar["TXT_PEKERJAAN_SUAMI_ISTRI"] . '"></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Alamat Pekerjaan Suami /
                     Istri</label>
                 <div class="col-sm-10"><input type="text" id="alamat-pekerjaan-suami-istri-edit"
-                        class="form-control" value=""></div>
+                        class="form-control" value="' . $kar["TXT_NAMA_ALAMAT_PEKERJAAN_SUAMI_ISTRI"] . '"></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Telepon Suami / Istri</label>
                 <div class="col-sm-10"><input type="text" id="telepon-suami-istri-edit" class="form-control"
-                        value=""></div>
+                        value="' . $kar["TXT_TELEPON_SUAMI_ISTRI"] . '"></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Nama Anak 1</label>
-                <div class="col-sm-10"><input type="text" id="anak-1-edit" class="form-control" value=""></div>
+                <div class="col-sm-10"><input type="text" id="anak-1-edit" class="form-control" value="' . $kar["TXT_NAMA_ANAK_1"] . '"></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Nama Anak 2</label>
-                <div class="col-sm-10"><input type="text" id="anak-2-edit" class="form-control" value=""></div>
+                <div class="col-sm-10"><input type="text" id="anak-2-edit" class="form-control" value="' . $kar["TXT_NAMA_ANAK_2"] . '"></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Nama Anak 3</label>
-                <div class="col-sm-10"><input type="text" id="anak-3-edit" class="form-control" value=""></div>
+                <div class="col-sm-10"><input type="text" id="anak-3-edit" class="form-control" value="' . $kar["TXT_NAMA_ANAK_3"] . '"></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Nama Anak 4</label>
-                <div class="col-sm-10"><input type="text" id="anak-4-edit" class="form-control" value=""></div>
+                <div class="col-sm-10"><input type="text" id="anak-4-edit" class="form-control" value="' . $kar["TXT_NAMA_ANAK_4"] . '"></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Nama Anak 5</label>
-                <div class="col-sm-10"><input type="text" id="anak-5-edit" class="form-control" value=""></div>
+                <div class="col-sm-10"><input type="text" id="anak-5-edit" class="form-control" value="' . $kar["TXT_NAMA_ANAK_5"] . '"></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">Email</label>
-                <div class="col-sm-10"><input type="text" id="email-edit" class="form-control" value=""></div>
+                <div class="col-sm-10"><input type="text" id="email-edit" class="form-control" value="' . $kar["TXT_EMAIL"] . '"></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">NIK</label>
-                <div class="col-sm-10"><input type="text" id="nik-edit" class="form-control" value=""></div>
+                <div class="col-sm-10"><input type="text" id="nik-edit" class="form-control" value="' . $kar["TXT_NIK"] . '"></div>
             </div>
             <div class="form-group  row"><label class="col-sm-2 col-form-label">NPWP</label>
-                <div class="col-sm-10"><input type="text" id="npwp-edit" class="form-control" value=""></div>
+                <div class="col-sm-10"><input type="text" id="npwp-edit" class="form-control" value="' . $kar["TXT_NPWP"] . '"></div>
             </div>';
             }
             echo $output;
