@@ -28,12 +28,11 @@
                                     <td><?= $no; ?></td>
                                     <td><?= $row['nama_divisi'] ?></td>
                                     <td class="text-center">
-                                        <button class="btn btn-xs btn-primary btnSee" data-id="<?= $row['id'] ?>" id="btnSee"><i class="fa fa-eye"></i></button>
                                         <?php if ($rar['update'] == '1') : ?>
-                                        <button class="btn btn-xs btn-success btnEdit" data-id="<?= $row['id'] ?>" id="btnEdit"><i class="fa fa-edit"></i></button>
+                                            <button class="btn btn-xs btn-success btnEdit" data-nama="<?= $row['nama_divisi'] ?>" data-id="<?= $row['id'] ?>" id="btnEdit"><i class="fa fa-edit"></i></button>
                                         <?php endif; ?>
                                         <?php if ($rar['delete'] == '1') : ?>
-                                        <button class="btn btn-xs btn-danger btnDelete" data-id="<?= $row['id'] ?>" id="btnDelete"><i class="fa fa-trash"></i></button>
+                                            <button class="btn btn-xs btn-danger btnDelete" data-id="<?= $row['id'] ?>" id="btnDelete"><i class="fa fa-trash"></i></button>
                                         <?php endif; ?>
                                     </td>
                                 </tr>
@@ -94,13 +93,71 @@
                 }
             })
         }
-        $(".btnSee").click(function() {
-            const id = $(this).data('id');
-            alert(id)
-        })
         $(".btnEdit").click(function() {
             const id = $(this).data('id');
-            alert(id)
+            const namaLama = $(this).data('nama');
+            // alert(id)
+            Swal.fire({
+                title: 'Ubah nama divisi',
+                text: 'Masukkan nama divisi yang baru dikolom dibawah ini',
+                input: 'text',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Ubah',
+                cancelButtonText: 'Batal',
+                cancelButtonColor: '#FF3232',
+                confirmButtonColor: '#66CDAA',
+                showLoaderOnConfirm: true,
+                allowOutsideClick: false,
+                preConfirm: async (ubahs) => {
+                    try {
+                        const url = "<?= base_url('datakaryawan/divisiAction') ?>";
+                        const response = await fetch(url, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json", // Ubah header Content-Type
+                            },
+                            body: JSON.stringify({
+                                id: id,
+                                namaBaru: ubahs,
+                                namaLama: namaLama
+                            }) // Ubah payload menjadi JSON string
+                        });
+                        if (!response.ok) {
+                            throw new Error("HTTP error! status: " + response.status);
+                        }
+                        const resultText = await response.json();
+                        console.log(resultText);
+                        if (resultText.status === 'error') {
+                            swal.fire({
+                                title: 'Error',
+                                text: resultText.message,
+                                icon: 'error',
+                                showCancelButton: false,
+                                allowOutsideClick: false
+                            }).then((xte) => {
+                                if (xte.isConfirmed) {
+                                    window.location.reload();
+                                }
+                            })
+                        } else if (resultText.status === 'success') {
+                            swal.fire({
+                                title: 'Success',
+                                text: resultText.message,
+                                icon: 'success',
+                                showCancelButton: false,
+                                allowOutsideClick: false
+                            }).then((xte) => {
+                                if (xte.isConfirmed) {
+                                    window.location.reload();
+                                }
+                            })
+                        }
+                    } catch (error) {
+                        console.error("ERROR : ", error);
+                    }
+                }
+            });
         })
         $(".btnDelete").click(function() {
             const id = $(this).data('id');

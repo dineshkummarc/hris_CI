@@ -651,6 +651,59 @@ class Datakaryawan extends CI_Controller
         echo $output;
     }
 
+    function divisiAction()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            show_404(); // Atau tindakan lain yang sesuai
+        }
+
+        $input = json_decode(file_get_contents('php://input'), true);
+
+        // echo json_encode($input); die();
+
+        if (!isset($input['id']) || !isset($input['namaBaru'])) {
+            $response = array(
+                'status' => 'error',
+                'message' => 'Data tidak lengkap. Pastikan id karyawan dan tanggal resign ada dalam request.'
+            );
+        } else {
+            $idDivisi = $input['id'];
+            $namaBaru = $input['namaBaru'];
+            $namaLama = $input['namaLama'];
+
+            $data = [
+                'nama_divisi'   => strtoupper($namaBaru),
+                'date_added'    => time()
+            ];
+            $this->db->where('id', $idDivisi);
+            $update = $this->db->update('tb_divisi', $data);
+
+            if ($update) {
+                // $sql = "UPDATE `tb_user` SET `TXT_DIVISI` = '$namaBaru' WHERE `TXT_DIVISI` = '$namaLama'";
+                $this->db->where('TXT_DIVISI', $namaLama);
+                $this->db->set('TXT_DIVISI', strtoupper($namaBaru));
+                $this->db->update('tb_user');
+
+                $response = array(
+                    'status' => 'success', // atau 'error' jika gagal
+                    'message' => 'Divisi berhasil diubah' // Pesan berhasil atau pesan error
+                    // Jika diperlukan, tambahkan data tambahan untuk dikirim ke client
+                );
+            } else {
+                $response = array(
+                    'status' => 'error', // atau 'error' jika gagal
+                    'message' => 'Gagal ubah devisi, kesalahan system' // Pesan berhasil atau pesan error
+                    // Jika diperlukan, tambahkan data tambahan untuk dikirim ke client
+                );
+            }
+        }
+
+        header('Content-Type: application/json');
+
+        // Kembalikan respons dalam format JSON
+        echo json_encode($response);
+    }
+
     function nonaktifkanKaryawan()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

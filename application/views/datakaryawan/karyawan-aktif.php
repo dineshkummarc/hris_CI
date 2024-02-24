@@ -423,7 +423,7 @@
                                     throw new Error("HTTP error! status: " + response.status);
                                 }
                                 const resultText = await response.json();
-                                console.log(resultText);
+                                // console.log(resultText);
                                 if (resultText.status === 'error') {
                                     swal.fire({
                                         title: 'Error',
@@ -433,7 +433,7 @@
                                         allowOutsideClick: false
                                     }).then((resulte) => {
                                         if (resulte.isConfirmed) {
-                                            window.location.reload;
+                                            window.location.reload();
                                         }
                                     })
                                 } else if (resultText.status === 'success') {
@@ -445,12 +445,17 @@
                                         allowOutsideClick: false
                                     }).then((resulte) => {
                                         if (resulte.isConfirmed) {
-                                            window.location.reload;
+                                            window.location.reload();
                                         }
                                     })
                                 }
                             } catch (error) {
-                                console.error("ERROR : ", error);
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: error,
+                                    icon: 'error'
+                                })
+                                // console.error("ERROR : ", error);
                             }
                         }
                     });
