@@ -19,4 +19,12 @@ class M_karyawan extends CI_Model
 
         return $query;
     }
+
+    public function getUrutanPelamar()
+    {
+        $sql    = "SELECT MAX(kode) AS idArr FROM (SELECT CAST(urutan AS INT) AS kode FROM (SELECT SUBSTRING(id_pelamar, 10) AS urutan FROM tb_pelamar WHERE YEAR(tgl_interview) = '" . date('Y') . "') AS tabel_a) AS table_b;";
+        $query  = $this->db->query($sql);
+
+        return $query;
+    }
 }
