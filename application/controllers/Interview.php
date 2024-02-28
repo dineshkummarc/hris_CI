@@ -132,6 +132,18 @@ class Interview extends CI_Controller
 
     public function add()
     {
+        
+        $this->form_validation->set_rules('tanggal', 'Tanggal Interview', 'trim|required');
+        $this->form_validation->set_rules('nama', 'Nama Pelamar', 'trim|required');
+        $this->form_validation->set_rules('posisi', 'Posisi yang dilamar', 'trim|required');
+        $this->form_validation->set_rules('usia', 'Usia', 'trim|required');
+        $this->form_validation->set_rules('pendidikan', 'Pendidikan terahir', 'trim|required');
+        $this->form_validation->set_rules('fakultas', 'Fakultas', 'trim|required');
+        $this->form_validation->set_rules('jurusan', 'Jurusan', 'trim|required');
+        $this->form_validation->set_rules('sekolah', 'Sekolah', 'trim|required');
+        $this->form_validation->set_rules('alasan', 'Alasan', 'trim|required');
+        $this->form_validation->set_rules('rekomendasi', 'Rekomendasi', 'trim|required');
+        $this->form_validation->set_rules('salary', 'Permohonan Salary', 'trim|numeric');
 
         if ($this->form_validation->run() == FALSE) {
             # code...
@@ -170,6 +182,13 @@ class Interview extends CI_Controller
                 'alasan_hasil'      => $this->input->post('alasan'),
                 'input_by'      => $this->input->post('uid')
             ];
+
+            if ($this->db->insert('tb_pelamar', $data)) {
+                $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data pelamar ditambahkan!</div>');
+            } else {
+                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Gagal input data pelamar!</div>');
+                redirect('datakaryawan/aktif');
+            }
         }
     }
 }
