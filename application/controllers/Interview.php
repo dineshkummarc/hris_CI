@@ -13,7 +13,7 @@ class Interview extends CI_Controller
 
     public function hasil()
     {
-        $data['title']      = "Hasil Rekap";
+        $data['title']  = "Hasil Rekap";
         $data['user']   = $this->db->get_where('tb_user', ['TXT_EMAIL' => $this->session->userdata('email')])->row_array();
         $data['rar']    = $this->db->get_where('role_access_rights', ['id' => $this->session->userdata('rar_id')])->row_array();
 
