@@ -138,7 +138,7 @@ class Interview extends CI_Controller
         $this->form_validation->set_rules('posisi', 'Posisi yang dilamar', 'trim|required');
         $this->form_validation->set_rules('usia', 'Usia', 'trim|required');
         $this->form_validation->set_rules('pendidikan', 'Pendidikan terahir', 'trim|required');
-        $this->form_validation->set_rules('fakultas', 'Fakultas', 'trim|required');
+        // $this->form_validation->set_rules('fakultas', 'Fakultas', 'trim|required');
         $this->form_validation->set_rules('jurusan', 'Jurusan', 'trim|required');
         $this->form_validation->set_rules('sekolah', 'Sekolah', 'trim|required');
         $this->form_validation->set_rules('alasan', 'Alasan', 'trim|required');
@@ -185,9 +185,10 @@ class Interview extends CI_Controller
 
             if ($this->db->insert('tb_pelamar', $data)) {
                 $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data pelamar ditambahkan!</div>');
+                redirect('interview/hasil');
             } else {
                 $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Gagal input data pelamar!</div>');
-                redirect('datakaryawan/aktif');
+                redirect('interview/hasil');
             }
         }
     }

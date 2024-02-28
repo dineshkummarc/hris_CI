@@ -81,7 +81,7 @@
                         width: 900,
                         formatter: function(value) {
                             return [
-                                '<div class="btn-group">' + 
+                                '<div class="btn-group">' +
                                 '<button class="btn btn-xs btn-warning update" data-id="' + value + '">Update</button> ' +
                                 '<button class="btn btn-xs btn-danger delete" data-id="' + value + '">Delete</button>' +
                                 '</div>'
@@ -101,11 +101,16 @@
                 $('body').on('click', '#tb_rhi .update', function() {
                     const id = $(this).data("id");
                     const Url = "<?= base_url('interview/actInterview') ?>";
-                    async (id) => {
-                        try {} catch (error) {
-                            console.log(error);
-                        }
-                    }
+                    Swal.fire({
+                        title: 'Update Hasil Interview',
+                        text: 'silahkan pilih tombol dibawah untuk action update',
+                        icon: 'question',
+                        showCancelButton: true,
+                        showDenyButton: true,
+                        denyButtonText: 'Tolak',
+                        confirmButtonText: 'Terima',
+                        cancelButtonText: 'Pertimbangkan'
+                    })
                 });
             })
             .catch(function(error) {
@@ -115,4 +120,17 @@
     $(document).ready(function() {
         ambilHasilInterview();
     })
+    var icons = {
+        paginationSwitchDown: 'fa fa-angle-double-down',
+        paginationSwitchUp: 'fa fa-angle-double-up',
+        refresh: 'fa fa-refresh'
+    }
+
+    icons.paginationSwitchDown += ' fw-bold icon-size-lg';
+    icons.refresh += ' fw-bold icon-size-lg';
+
+    var tabels = document.querySelector('table');
+    if (tabels) {
+        tabels.setAttribute('data-icons', 'icons');
+    }
 </script>
