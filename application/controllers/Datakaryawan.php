@@ -315,8 +315,11 @@ class Datakaryawan extends CI_Controller
             );
         }
 
-        header('Content-Type: application/json');
-        echo json_encode($data);
+        // header('Content-Type: application/json');
+        // echo json_encode($data);
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($data));
     }
 
     public function divisi()

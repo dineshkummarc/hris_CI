@@ -83,10 +83,15 @@
                         formatter: function(value) {
                             return [
                                 '<div class="btn-group">' +
+<<<<<<< HEAD
                                 '<button class="btn btn-xs btn-warning update" data-id="' +
                                 value + '">Update</button> ' +
                                 '<button class="btn btn-xs btn-danger delete" data-id="' +
                                 value + '">Delete</button>' +
+=======
+                                '<button class="btn btn-xs btn-warning update" data-id="' + value + '">Update</button> ' +
+                                '<button class="btn btn-xs btn-danger delete" data-id="' + value + '">Delete</button>' +
+>>>>>>> 1c5065cf0cf687195ca239b4b6b6221088a22442
                                 '</div>'
                             ]
                         }
@@ -106,7 +111,11 @@
                     const Url = "<?= base_url('interview/actInterview') ?>";
                     async (id) => {
                         try {
+<<<<<<< HEAD
 
+=======
+                            
+>>>>>>> 1c5065cf0cf687195ca239b4b6b6221088a22442
                         } catch (error) {
                             console.log(error);
                         }
@@ -119,6 +128,7 @@
     }
     $(document).ready(function() {
         ambilHasilInterview();
+<<<<<<< HEAD
 
 
     })
@@ -135,4 +145,7 @@
     if (tabels) {
         tabels.setAttribute('data-icons', 'icons');
     }
+=======
+    })
+>>>>>>> 1c5065cf0cf687195ca239b4b6b6221088a22442
 </script>

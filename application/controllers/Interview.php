@@ -129,4 +129,47 @@ class Interview extends CI_Controller
         header('Content-Type: application/json');
         echo json_encode($data);
     }
+
+    public function add()
+    {
+
+        if ($this->form_validation->run() == FALSE) {
+            # code...
+            $data['title']      = "Tambah Data";
+            $data['user']   = $this->db->get_where('tb_user', ['TXT_EMAIL' => $this->session->userdata('email')])->row_array();
+            $data['rar']    = $this->db->get_where('role_access_rights', ['id' => $this->session->userdata('rar_id')])->row_array();
+
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/headbar', $data);
+            $this->load->view('interview/tambahData', $data);
+            $this->load->view('templates/footer');
+        } else {
+            # code...
+            $data = [
+                'id_pelamar'        => $this->_urutanIDuser(),
+                'nama_pelamar'      => $this->input->post('nama'),
+                'posisi_yangdilamar'    => $this->input->post('posisi'),
+                'usia_pelamar'          => $this->input->post('usia'),
+                'pendidikan_terahir'    => $this->input->post('pendidikan'),
+                'fakultas_pelamar'      => $this->input->post('fakultas'),
+                'jurusan_pelamar'       => $this->input->post('jurusan'),
+                'nama_sekolah'        => $this->input->post('sekolah'),
+                'tgl_interview'       => $this->input->post('tanggal'),
+                'pengalaman_kerja1'       => $this->input->post('tahun_pengalaman_1') . "|" . $this->input->post('jabatan_pengalaman_1') . "|" . $this->input->post('perusahaan_pengalaman_1'),
+                'pengalaman_kerja2'       => $this->input->post('tahun_pengalaman_2') . "|" . $this->input->post('jabatan_pengalaman_2') . "|" . $this->input->post('perusahaan_pengalaman_2'),
+                'pengalaman_kerja3'       => $this->input->post('tahun_pengalaman_3') . "|" . $this->input->post('jabatan_pengalaman_3') . "|" . $this->input->post('perusahaan_pengalaman_3'),
+                'pengalaman_kerja4'       => $this->input->post('tahun_pengalaman_4') . "|" . $this->input->post('jabatan_pengalaman_4') . "|" . $this->input->post('perusahaan_pengalaman_4'),
+                'pengalaman_kerja5'       => $this->input->post('tahun_pengalaman_5') . "|" . $this->input->post('jabatan_pengalaman_5') . "|" . $this->input->post('perusahaan_pengalaman_5'),
+                'pengalaman_kerja6'       => $this->input->post('tahun_pengalaman_6') . "|" . $this->input->post('jabatan_pengalaman_6') . "|" . $this->input->post('perusahaan_pengalaman_6'),
+                'kekurangan_pelamar'      => $this->input->post('kekurangan'),
+                'kelebihan_pelamar'       => $this->input->post('kelebihan'),
+                'vaksin'        => $this->input->post('jenis_vaksin') . "|" . $this->input->post('nama_vaksin'),
+                'req_salary'        => $this->input->post('salary'),
+                'hasil_intervie'    => $this->input->post('rekomendasi'),
+                'alasan_hasil'      => $this->input->post('alasan'),
+                'input_by'      => $this->input->post('uid')
+            ];
+        }
+    }
 }
