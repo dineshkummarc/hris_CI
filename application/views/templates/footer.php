@@ -71,6 +71,7 @@
 <script src="<?= base_url('assets/'); ?>js/plugins/typehead/bootstrap3-typeahead.min.js"></script>
 
 <script src="<?= base_url('node_modules') ?>/axios/dist/axios.min.js"></script>
+<script async src="<?= base_url('assets') ?>/js/swalalertmain.js"></script>
 
 <script>
     $(document).ready(function() {

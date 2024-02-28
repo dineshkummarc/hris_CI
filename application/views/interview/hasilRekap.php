@@ -98,20 +98,57 @@
                     return html.join('')
                 }
 
-                $('body').on('click', '#tb_rhi .update', function() {
+                $('body').on('click', '#tb_rhi .update', async function() {
                     const id = $(this).data("id");
                     const Url = "<?= base_url('interview/actInterview') ?>";
-                    Swal.fire({
-                        title: 'Update Hasil Interview',
-                        text: 'silahkan pilih tombol dibawah untuk action update',
-                        icon: 'question',
-                        showCancelButton: true,
-                        showDenyButton: true,
-                        denyButtonText: 'Tolak',
-                        confirmButtonText: 'Terima',
-                        cancelButtonText: 'Pertimbangkan'
-                    })
+                    try {
+                        const update = await Swal.fire({
+                            title: 'Update Hasil Interview',
+                            text: 'Silahkan pilih tombol dibawah untuk action update',
+                            icon: 'question',
+                            showCancelButton: true,
+                            showDenyButton: true,
+                            denyButtonText: 'Tolak',
+                            confirmButtonText: 'Terima',
+                            cancelButtonText: 'Pertimbangkan'
+                        });
+                        if (update.isConfirmed) {
+                            const response = await fetch(Url, {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json", // Ubah header Content-Type
+                                },
+                                body: JSON.stringify({
+                                    id: id,
+                                    action: 'terima'
+                                })
+                            });
+                            if (!response.ok) {
+                                throw new Error("HTTP error! status: " + response.status);
+                            }
+                            const resultText = await response.json();
+                            // allert
+                            if (resultText.status == "success") {
+                                swalalertSuccess(resultText.message);
+                            } else {
+                                swalalertError(resultText.message);
+                            }
+                            // Lakukan sesuatu dengan resultText jika diperlukan
+                        } else if (update.isDenied) {
+                            alert('denied');
+                        } else if (update.dismiss === Swal.DismissReason.cancel) {
+                            alert('cancel');
+                        }
+                    } catch (error) {
+                        Swal.fire({
+                            title: 'Error',
+                            text: error.message, // Ubah pesan error menjadi error.message
+                            icon: 'error'
+                        });
+                        // console.error("ERROR : ", error);
+                    }
                 });
+
             })
             .catch(function(error) {
                 console.error(error);

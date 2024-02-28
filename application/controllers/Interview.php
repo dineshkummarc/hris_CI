@@ -132,7 +132,7 @@ class Interview extends CI_Controller
 
     public function add()
     {
-        
+
         $this->form_validation->set_rules('tanggal', 'Tanggal Interview', 'trim|required');
         $this->form_validation->set_rules('nama', 'Nama Pelamar', 'trim|required');
         $this->form_validation->set_rules('posisi', 'Posisi yang dilamar', 'trim|required');
@@ -191,5 +191,85 @@ class Interview extends CI_Controller
                 redirect('interview/hasil');
             }
         }
+    }
+
+    public function actInterview()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            show_404(); // Or perform other appropriate actions
+        }
+
+        $input = json_decode(file_get_contents('php://input'), true);
+        // error_log(json_encode($input));
+
+        if (!isset($input['id'])) {
+            $response = array(
+                'status' => 'error',
+                'message' => 'Incomplete data. Make sure the applicant id is present in the request.'
+            );
+        } else {
+            $id = $input['id'];
+
+            if (!isset($input['action'])) {
+                $response = array(
+                    'status' => 'error',
+                    'message' => 'No action specified.'
+                );
+            } else {
+                switch ($input['action']) {
+                    case 'terima':
+                        $this->db->set('hasil_intervie', '1');
+                        $this->db->where('id_pelamar', $id);
+                        $this->db->update('tb_pelamar');
+
+                        $response = array(
+                            'status'    => 'success',
+                            'message'   => 'Status pelamar berhasil diupdate (diterima).'
+                        );
+                        break;
+
+                    case 'tolak':
+                        $this->db->set('hasil_intervie', '0');
+                        $this->db->where('id_pelamar', $id);
+                        $this->db->update('tb_pelamar');
+
+                        $response = array(
+                            'status'    => 'success',
+                            'message'   => 'Status pelamar berhasil diupdate (ditolak).'
+                        );
+                        break;
+
+                    case 'pertimbangkan':
+                        $this->db->set('hasil_intervie', '2');
+                        $this->db->where('id_pelamar', $id);
+                        $this->db->update('tb_pelamar');
+
+                        $response = array(
+                            'status' => 'success',
+                            'message' => 'Status pelamar berhasil diupdate (dipertimbangkan).'
+                        );
+                        break;
+
+                    case 'delete':
+                        // Handle delete action if needed
+                        $response = array(
+                            'status' => 'success',
+                            'message' => 'Applicant deleted.'
+                        );
+                        break;
+
+                    default:
+                        $response = array(
+                            'status' => 'error',
+                            'message' => 'Invalid action.'
+                        );
+                        break;
+                }
+            }
+        }
+
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($response));
     }
 }
