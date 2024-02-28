@@ -123,9 +123,9 @@
                             <label class="col-sm-2 col-form-label">Rekomendasi HRD</label>
                             <div class="col-sm-10">
                                 <select name="rekomendasi" id="rekomendasi" class="form-control">
-                                    <option value="terima">terima</option>
-                                    <option value="dipertimbangkan">dipertimbangkan</option>
-                                    <option value="tolak">tolak</option>
+                                    <option value="1">terima</option>
+                                    <option value="2">dipertimbangkan</option>
+                                    <option value="0">tolak</option>
                                 </select>
                                 <?= form_error('rekomendasi', '<small class="text-danger pl-3">', '</small>'); ?>
                             </div>
