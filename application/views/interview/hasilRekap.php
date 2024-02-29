@@ -98,6 +98,50 @@
                     return html.join('')
                 }
 
+                $('body').on('click', '#tb_rhi .delete', async function() {
+                    const id = $(this).data("id");
+                    const Url = "<?= base_url('interview/actInterview') ?>";
+                    try {
+                        const hapus = await Swal.fire({
+                            title: 'Delete',
+                            text: 'Hapus data pelamar ini?',
+                            icon: 'question',
+                            showCancelButton: true,
+                            confirmButtonText: 'Hapus',
+                            cancelButtonText: 'Batal'
+                        });
+                        if (hapus.isConfirmed) {
+                            const response = await fetch(Url, {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json", // Ubah header Content-Type
+                                },
+                                body: JSON.stringify({
+                                    id: id,
+                                    action: 'delete'
+                                })
+                            });
+                            if (!response.ok) {
+                                throw new Error("HTTP error! status: " + response.status);
+                            }
+                            const resultText = await response.json();
+                            // allert
+                            if (resultText.status == "success") {
+                                swalalertSuccess(resultText.message);
+                            } else {
+                                swalalertError(resultText.message);
+                            }
+                        }
+                    } catch (error) {
+                        Swal.fire({
+                            title: 'Error',
+                            text: error.message, // Ubah pesan error menjadi error.message
+                            icon: 'error'
+                        });
+                        // console.error("ERROR : ", error);
+                    }
+                });
+
                 $('body').on('click', '#tb_rhi .update', async function() {
                     const id = $(this).data("id");
                     const Url = "<?= base_url('interview/actInterview') ?>";
@@ -135,9 +179,49 @@
                             }
                             // Lakukan sesuatu dengan resultText jika diperlukan
                         } else if (update.isDenied) {
-                            alert('denied');
+                            // alert('denied'); Tolak
+                            const response = await fetch(Url, {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json", // Ubah header Content-Type
+                                },
+                                body: JSON.stringify({
+                                    id: id,
+                                    action: 'tolak'
+                                })
+                            });
+                            if (!response.ok) {
+                                throw new Error("HTTP error! status: " + response.status);
+                            }
+                            const resultText = await response.json();
+                            // allert
+                            if (resultText.status == "success") {
+                                swalalertSuccess(resultText.message);
+                            } else {
+                                swalalertError(resultText.message);
+                            }
                         } else if (update.dismiss === Swal.DismissReason.cancel) {
-                            alert('cancel');
+                            // alert('cancel');pertimbangkan
+                            const response = await fetch(Url, {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json", // Ubah header Content-Type
+                                },
+                                body: JSON.stringify({
+                                    id: id,
+                                    action: 'pertimbangkan'
+                                })
+                            });
+                            if (!response.ok) {
+                                throw new Error("HTTP error! status: " + response.status);
+                            }
+                            const resultText = await response.json();
+                            // allert
+                            if (resultText.status == "success") {
+                                swalalertSuccess(resultText.message);
+                            } else {
+                                swalalertError(resultText.message);
+                            }
                         }
                     } catch (error) {
                         Swal.fire({

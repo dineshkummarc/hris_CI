@@ -252,9 +252,11 @@ class Interview extends CI_Controller
 
                     case 'delete':
                         // Handle delete action if needed
+                        $this->db->where('id_pelamar', $id);
+                        $this->db->delete('tb_pelamar');
                         $response = array(
                             'status' => 'success',
-                            'message' => 'Applicant deleted.'
+                            'message' => 'Data pelamar berhasil dihapus.'
                         );
                         break;
 
