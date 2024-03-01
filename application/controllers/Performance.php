@@ -165,4 +165,32 @@ class Performance extends CI_Controller
             ->set_content_type('application/json')
             ->set_output(json_encode($data));
     }
+
+    public function downloadIpr()
+    {
+
+        $id = $this->input->get('id');
+        $namaKaryawan = $this->input->get('nama');
+
+
+
+        $data['hasil1']     = $this->m_ipr->ambilHasilForm($id, '1');
+        $data['hasil2']     = $this->m_ipr->ambilHasilForm($id, '2');
+        $data['hasil3']     = $this->m_ipr->ambilHasilForm($id, '3');
+        $data['hasil4']     = $this->m_ipr->ambilHasilForm($id, '4');
+        $data['hasil5']     = $this->m_ipr->ambilHasilForm($id, '5');
+        $data['soal']       = $this->db->get('tb_indikator_penilaian_karyawan');
+        $data['jumlah_penilai'] = $this->m_ipr->jumlahPenilai($id)->result();
+        $data['perbaikan1'] = $this->m_ipr->ambilKomen($id, 'perbaikan', 'komen-1');
+        $data['perbaikan2'] = $this->m_ipr->ambilKomen($id, 'perbaikan', 'komen-2');
+        $data['perbaikan3'] = $this->m_ipr->ambilKomen($id, 'perbaikan', 'komen-3');
+        $data['perbaikan4'] = $this->m_ipr->ambilKomen($id, 'perbaikan', 'komen-4');
+        $data['perbaikan5'] = $this->m_ipr->ambilKomen($id, 'perbaikan', 'komen-5');
+        $this->load->library("pdf");
+
+        $this->pdf->setPaper('A4', 'potrai');
+        $this->pdf->filename = $namaKaryawan . ".pdf";
+        // $this->pdf->load_view('performance/iprDonwload', $data);
+        $this->load->view('performance/iprDonwload', $data);
+    }
 }

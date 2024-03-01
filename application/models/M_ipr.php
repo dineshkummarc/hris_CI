@@ -17,4 +17,27 @@ class M_ipr extends CI_Model
         $query = $this->db->get('tb_form_penilaian_karyawan');
         return $query;
     }
+
+    public function ambilHasilForm($id, $angka)
+    {
+        $penilai = "penilai" . $angka;
+        $this->db->select('*')
+            ->from('tb_nilai_penilaian_karyawan')
+            ->where('INT_ID_FORM', $id)
+            ->like('TXT_INDIKATOR_NILAI_PENILAI', $penilai);
+        $result = $this->db->get();
+
+        return $result;
+    }
+
+    public function jumlahPenilai($id)
+    {
+        $this->db->select('INT_JUMLAH_PENILAI')
+            ->from('tb_nilai_penilaian_karyawan')
+            ->where('INT_ID_FORM', $id);
+
+        $result = $this->db->get();
+
+        return $result;
+    }
 }

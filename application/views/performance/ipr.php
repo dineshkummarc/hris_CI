@@ -81,6 +81,13 @@
                     })
                     return html.join('')
                 }
+                $('body').on('click', '#tb_ipr .printPdf', function() {
+                    const idForm = $(this).data('idform');
+                    const namaKaryawan = $(this).data('name');
+
+                    window.open("<?= base_url('performance/downloadIpr') ?>?id=" + idForm + "&nama=" + namaKaryawan, "_blank");
+                });
+
             })
             .catch(function(error) {
                 console.error(error);
