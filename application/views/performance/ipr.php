@@ -64,6 +64,11 @@
                         title: 'Status',
                         sortable: true
                     }, {
+                        field: 'periods',
+                        title: 'Periode',
+                        sortable: true,
+                        filterControl: 'select'
+                    }, {
                         field: 'buttons',
                         title: 'Act'
                     }]

@@ -307,13 +307,13 @@
                 <h4 class="modal-title">Form edit karyawan</h4>
                 <small class="font-bold">Isi field dengan lengkap, pastikan data yang diinput adalah data yang sebenarnya.</small>
             </div>
-            <form action="<?= base_url('datakaryawan/editKaryawan') ?>">
+            <form action="<?= base_url('datakaryawan/editKaryawan') ?>" method="POST">
                 <div class="modal-body" id="detailForm">
 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-white" data-dismiss="modal">tutup</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </form>
         </div>
@@ -463,12 +463,14 @@
 
                 $('body').on('click', '#tb_karyawan .edit', function() {
                     const id = $(this).data('id');
+                    const act = 'tampil';
+
                     fetch("<?= base_url('datakaryawan/editKaryawan') ?>", {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded',
                             },
-                            body: 'id=' + id
+                            body: 'id=' + id + '&act=' + act
                         })
                         .then(function(response) {
                             return response.text();

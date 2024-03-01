@@ -28,8 +28,14 @@ class Performance extends CI_Controller
 
     public function ambilDataIpr()
     {
+        error_reporting(0);
         $data = array();
         $user = $this->session->userdata('nama_lengkap');
+        $myData   = $this->db->get_where('tb_user', ['TXT_EMAIL' => $this->session->userdata('email')])->row_array();
+        $function_name = __FUNCTION__;
+
+        $forb = $this->db->get_where('tb_akses_menu', ['divisi' => $myData['TXT_DIVISI'], 'menu' => $function_name])->row_array();
+
 
         $ambilDataIprs = $this->m_ipr->get_ipr_data($user);
 
@@ -54,6 +60,8 @@ class Performance extends CI_Controller
             } else if ($row->TXT_SUDAH_MENILAI_1 != "0" && $row->TXT_SUDAH_MENILAI_2 != "0" && $row->TXT_SUDAH_MENILAI_3 != "0" && $row->TXT_SUDAH_MENILAI_4 != "0") {
                 // apabila nilai sudah diisi semua
                 $style = "display:none;";
+            } else {
+                $style = '';
             }
 
             $pencocokan_penilai = "";
@@ -85,12 +93,50 @@ class Performance extends CI_Controller
                 $komen_penilai = "komen-5";
             }
             if ($pencocokan_penilai != '') {
-                $button = '<button class="btn btn-sm btn-primary mt-1 view" data-toggle="modal" data-user="' . $pencocokan_penilai . '" data-penilai="' . $status_penilai . '" data-komen-penilai="' . $komen_penilai . '" data-id="' . $row->INT_ID_FORM . '" style="min-width:50px;' . $style . '">Nilai</button>';
+                $button1 = '<button class="btn btn-xs btn-primary mt-1 view" data-toggle="modal" data-user="' . $pencocokan_penilai . '" data-penilai="' . $status_penilai . '" data-komen-penilai="' . $komen_penilai . '" data-id="' . $row->INT_ID_FORM . '" style="min-width:50px;' . $style . '">Nilai</button>';
             } else {
-                $button = "";
+                $button1 = "";
+            }
+            if ($row->TXT_SUDAH_MENILAI_1 == "0" || $row->TXT_SUDAH_MENILAI_2 == "0" || $row->TXT_SUDAH_MENILAI_3 == "0" || $row->TXT_SUDAH_MENILAI_4 == "0" || $row->TXT_SUDAH_MENILAI_5 == "0") {
+                if ($user == $row->TXT_SUDAH_MENILAI_1) {
+                    $button2 = '<button style="min-width:50px;" data-penilai="' . $status_penilai . '" data-komen-penilai="' . $komen_penilai . '" data-user="' . $pencocokan_penilai . '" data-id="' . $row->INT_ID_FORM . '" class="btn btn-xs btn-default edit">Edit </button>';
+                } else {
+                    $button2 = "";
+                }
+                if ($user == $row->TXT_SUDAH_MENILAI_2) {
+                    $button2 = '<button style="min-width:50px;" data-penilai="' . $status_penilai . '>" data-komen-penilai="' . $komen_penilai . '" data-user="' . $pencocokan_penilai . '" data-id="' . $row->INT_ID_FORM . '" class="btn  btn-xs btn-default edit">Edit </button>';
+                } else {
+                    $button2 = "";
+                }
+                if ($user == $row->TXT_SUDAH_MENILAI_3) {
+                    $button2 = '<button style="min-width:50px;" data-penilai="' .  $status_penilai  . '" data-komen-penilai="' . $komen_penilai  . '" data-user="' .  $pencocokan_penilai  . '" data-id="' .  $row->INT_ID_FORM  . '" class="btn btn-xs btn-default edit">Edit </button>';
+                } else {
+                    $button2 = "";
+                }
+                if ($user == $row->TXT_SUDAH_MENILAI_4) {
+                    $button2 = '<button style="min-width:50px;" data-penilai="' .  $status_penilai  . '" data-komen-penilai="' . $komen_penilai  . '" data-user="' .  $pencocokan_penilai  . '" data-id="' .  $row->INT_ID_FORM  . '" class="btn btn-xs btn-default edit">Edit </button>';
+                } else {
+                    $button2 = "";
+                }
+                if ($user == $row->TXT_SUDAH_MENILAI_5) {
+                    $button2 = '<button style="min-width:50px;" data-penilai="' .  $status_penilai  . '" data-komen-penilai="' . $komen_penilai . '" data-user="' .  $pencocokan_penilai  . '" data-id="' .  $row->INT_ID_FORM  . '" class="btn btn-xs btn-default edit">Edit </button>';
+                } else {
+                    $button2 = "";
+                }
             }
 
+            if ($user == $row->TXT_NAMA_PEMBUAT) {
+                $button3 = '<button style="min-width:50px;" class="btn btn-xs btn-danger mt-1 hapus" data-id="' . $row->INT_ID_FORM . '"><i class="fa fa-trash"></i></button>';
+            }
 
+            if ($row->TXT_SUDAH_MENILAI_1 != "0" && $row->TXT_SUDAH_MENILAI_2 != "0" && $row->TXT_SUDAH_MENILAI_3 != "0" && $row->TXT_SUDAH_MENILAI_4 != "0" && $forb['forbiden_status'] == '1') {
+                $button4 = '<button style="min-width:50px;" class="printPdf btn btn-default btn-xs mt-1" data-idform="' . $row->INT_ID_FORM . '" data-name="' . $row->TXT_NAMA_KARYAWAN . '"><i class="fa fa-file-pdf-o fa-1x"></i></button>
+                <button style="min-width:50px;" class="lihat btn btn-warning btn-xs mt-1" data-idform="' . $row->INT_ID_FORM . '" data-name="' . $row->TXT_NAMA_KARYAWAN . '"><i class="fa fa-eye fa-1x"></i></button>
+                <button style="min-width:50px;" class="toExel btn btn-primary btn-xs mt-1" data-idform="' . $row->INT_ID_FORM . '" data-name="' . $row->TXT_NAMA_KARYAWAN . '"><i class="fa fa-file-excel-o fa-1x"></i></button>';
+                if ($forb['forbiden_status'] == '1') {
+                    $button4 .= '<button  style="min-width:50px;" data-id="' . $row->INT_ID_FORM . '" data-karyawan="' . $row->TXT_NAMA_KARYAWAN . '" class="btn btn-success btn-xs mt-1 kirim_nilai">Kirim</button>';
+                }
+            }
 
             $data[] = array(
                 'id'        => $row->INT_ID_FORM,
@@ -110,7 +156,8 @@ class Performance extends CI_Controller
                 'date_dari'      => $row->DATE_DARI,
                 'jumlah_penilai'    => $row->INT_JUMLAH_PENILAI,
                 'status'    => $status,
-                'buttons'   => $button
+                'buttons'   => $button1 . $button2 . $button3 . $button4,
+                'periods'   => $row->DATE_DARI . " s/d " . $row->DATE_PERIODE
             );
         }
 
