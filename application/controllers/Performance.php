@@ -126,15 +126,14 @@ class Performance extends CI_Controller
             }
 
             if ($user == $row->TXT_NAMA_PEMBUAT) {
-                $button3 = '<button style="min-width:50px;" class="btn btn-xs btn-danger mt-1 hapus" data-id="' . $row->INT_ID_FORM . '"><i class="fa fa-trash"></i></button>';
+                $button3 = '<button style="min-width:50px;" class="btn btn-xs btn-warning mt-1 hapus" data-id="' . $row->INT_ID_FORM . '"><i class="fa fa-trash"></i></button>';
             }
 
             if ($row->TXT_SUDAH_MENILAI_1 != "0" && $row->TXT_SUDAH_MENILAI_2 != "0" && $row->TXT_SUDAH_MENILAI_3 != "0" && $row->TXT_SUDAH_MENILAI_4 != "0" && $forb['forbiden_status'] == '1') {
-                $button4 = '<button style="min-width:50px;" class="printPdf btn btn-default btn-xs mt-1" data-idform="' . $row->INT_ID_FORM . '" data-name="' . $row->TXT_NAMA_KARYAWAN . '"><i class="fa fa-file-pdf-o fa-1x"></i></button>
-                <button style="min-width:50px;" class="lihat btn btn-warning btn-xs mt-1" data-idform="' . $row->INT_ID_FORM . '" data-name="' . $row->TXT_NAMA_KARYAWAN . '"><i class="fa fa-eye fa-1x"></i></button>
-                <button style="min-width:50px;" class="toExel btn btn-primary btn-xs mt-1" data-idform="' . $row->INT_ID_FORM . '" data-name="' . $row->TXT_NAMA_KARYAWAN . '"><i class="fa fa-file-excel-o fa-1x"></i></button>';
+                $button4 = '<button style="min-width:50px;" class="printPdf btn btn-danger btn-xs mt-1" data-idform="' . $row->INT_ID_FORM . '" data-name="' . $row->TXT_NAMA_KARYAWAN . '"><i class="fa fa-file-pdf-o fa-1x"></i></button>';
+                // <button style="min-width:50px;" class="toExel btn btn-primary btn-xs mt-1" data-idform="' . $row->INT_ID_FORM . '" data-name="' . $row->TXT_NAMA_KARYAWAN . '"><i class="fa fa-file-excel-o fa-1x"></i></button>';
                 if ($forb['forbiden_status'] == '1') {
-                    $button4 .= '<button  style="min-width:50px;" data-id="' . $row->INT_ID_FORM . '" data-karyawan="' . $row->TXT_NAMA_KARYAWAN . '" class="btn btn-success btn-xs mt-1 kirim_nilai">Kirim</button>';
+                    // $button4 .= '<button  style="min-width:50px;" data-id="' . $row->INT_ID_FORM . '" data-karyawan="' . $row->TXT_NAMA_KARYAWAN . '" class="btn btn-success btn-xs mt-1 kirim_nilai">Kirim</button>';
                 }
             }
 
