@@ -171,26 +171,50 @@ class Performance extends CI_Controller
 
         $id = $this->input->get('id');
         $namaKaryawan = $this->input->get('nama');
-
-
-
+        // ambil value hasil
         $data['hasil1']     = $this->m_ipr->ambilHasilForm($id, '1');
         $data['hasil2']     = $this->m_ipr->ambilHasilForm($id, '2');
         $data['hasil3']     = $this->m_ipr->ambilHasilForm($id, '3');
         $data['hasil4']     = $this->m_ipr->ambilHasilForm($id, '4');
         $data['hasil5']     = $this->m_ipr->ambilHasilForm($id, '5');
+        // list soal
         $data['soal']       = $this->db->get('tb_indikator_penilaian_karyawan');
-        $data['jumlah_penilai'] = $this->m_ipr->jumlahPenilai($id)->result();
+        // jumlah penilai
+        $data['jumlah_penilai'] = $this->m_ipr->jumlahPenilai($id)->row_array();
+        // jumlah soal
+        $data['jumllahSoal']    = $this->db->count_all_results('tb_indikator_penilaian_karyawan');
+        // ambil komen perbaikan
         $data['perbaikan1'] = $this->m_ipr->ambilKomen($id, 'perbaikan', 'komen-1');
         $data['perbaikan2'] = $this->m_ipr->ambilKomen($id, 'perbaikan', 'komen-2');
         $data['perbaikan3'] = $this->m_ipr->ambilKomen($id, 'perbaikan', 'komen-3');
         $data['perbaikan4'] = $this->m_ipr->ambilKomen($id, 'perbaikan', 'komen-4');
         $data['perbaikan5'] = $this->m_ipr->ambilKomen($id, 'perbaikan', 'komen-5');
+        // ambil value kekuatan
+        $data['kekuatan1']  = $this->m_ipr->ambilKomen($id, 'kekuatan', 'komen-1');
+        $data['kekuatan2']  = $this->m_ipr->ambilKomen($id, 'kekuatan', 'komen-2');
+        $data['kekuatan3']  = $this->m_ipr->ambilKomen($id, 'kekuatan', 'komen-3');
+        $data['kekuatan4']  = $this->m_ipr->ambilKomen($id, 'kekuatan', 'komen-4');
+        $data['kekuatan5']  = $this->m_ipr->ambilKomen($id, 'kekuatan', 'komen-5');
+        // ambil value kelemahan
+        $data['kelemahan1'] = $this->m_ipr->ambilKomen($id, 'kelemahan', 'komen-1');
+        $data['kelemahan2'] = $this->m_ipr->ambilKomen($id, 'kelemahan', 'komen-2');
+        $data['kelemahan3'] = $this->m_ipr->ambilKomen($id, 'kelemahan', 'komen-3');
+        $data['kelemahan4'] = $this->m_ipr->ambilKomen($id, 'kelemahan', 'komen-4');
+        $data['kelemahan5'] = $this->m_ipr->ambilKomen($id, 'kelemahan', 'komen-5');
+        // ambil rekomendasi
+        $data['rekomendasi1'] = $this->m_ipr->ambilKomen($id, 'rekomendasi', 'komen-1');
+        $data['rekomendasi2'] = $this->m_ipr->ambilKomen($id, 'rekomendasi', 'komen-2');
+        $data['rekomendasi3'] = $this->m_ipr->ambilKomen($id, 'rekomendasi', 'komen-3');
+        $data['rekomendasi4'] = $this->m_ipr->ambilKomen($id, 'rekomendasi', 'komen-4');
+        $data['rekomendasi5'] = $this->m_ipr->ambilKomen($id, 'rekomendasi', 'komen-5');
+        // ambil hasil form penilaian
+        $data['form_penilaian'] = $this->db->get_where('tb_form_penilaian_karyawan', ['INT_ID_FORM' => $id])->row_array();
+        // load library dompdf
         $this->load->library("pdf");
 
         $this->pdf->setPaper('A4', 'potrai');
         $this->pdf->filename = $namaKaryawan . ".pdf";
-        // $this->pdf->load_view('performance/iprDonwload', $data);
-        $this->load->view('performance/iprDonwload', $data);
+        $this->pdf->load_view('performance/iprDonwload', $data);
+        // $this->load->view('performance/iprDonwload', $data);
     }
 }
