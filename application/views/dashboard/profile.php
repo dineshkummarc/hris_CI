@@ -172,7 +172,7 @@
 
         $(".ubahPassword").click(function() {
             const id = $(this).data('id');
-            const Url = "<?= base_url('auth/change_password') ?>";
+            const Url = "<?= base_url('auth/changepassword') ?>";
             Swal.fire({
                 title: 'Ubah password',
                 text: 'Silahkan input password baru anda',

@@ -107,4 +107,41 @@ class Auth extends CI_Controller
 
         $this->load->view('auth/blocked');
     }
+
+    public function changepassword()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            show_404(); // Atau tindakan lain yang sesuai
+        }
+
+        $input = json_decode(file_get_contents('php://input'), true);
+
+        if (isset($input["id"]) || isset($input["karyawan"])) {
+            $id = $input["id"];
+            $newPassword = password_hash($input['karyawan'], PASSWORD_DEFAULT);
+
+            $this->db->set('password', $newPassword);
+            $this->db->where('user_id', $id);
+            if ($this->db->update('tb_user')) {
+                $response = array(
+                    'status' => 'success',
+                    'message' => 'Password anda telah diperbaharui!'
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'message' => 'Gagal eksekusi query, hubungi pihak IT'
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'message' => 'Data tidak lengkap. Pastikan anda memasukkan data dalam request.'
+            );
+        }
+
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($response));
+    }
 }
