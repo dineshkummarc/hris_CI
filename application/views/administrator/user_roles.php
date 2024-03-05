@@ -204,7 +204,8 @@
                         url: "<?= base_url('administrator/editRole') ?>",
                         method: 'POST',
                         data: forms,
-                        success: function() {
+                        success: function(data) {
+                            // console.log(data)
                             swal.fire({
                                 title: 'Berhasil Update',
                                 text: 'Role Telah berhasil diubah',
@@ -212,7 +213,7 @@
                                 confirmButtonText: 'Ok!, Terimakasih'
                             }).then((reslt) => {
                                 if (reslt.isConfirmed) {
-                                    document.location.href = "<?= base_url('administrator/userRole'); ?>";
+                                    document.location.href = "<?= base_url('administrator/role'); ?>";
                                 }
                             });
                         }

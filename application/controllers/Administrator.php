@@ -122,6 +122,40 @@ class Administrator extends CI_Controller
         echo json_encode($data);
     }
 
+    public function simpanRole()
+    {
+
+        $data = [
+            'role' => $this->input->post('nrole'),
+            'keterangan' => $this->input->post('nketerangan')
+        ];
+
+        $result = $this->db->get_where('user_role', $data);
+
+        if ($result->num_rows() > 0) {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Roles ini sudah ada!</div>');
+        } else {
+            $this->db->insert('user_role', $data);
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Role baru ditambahkan!</div>');
+        }
+    }
+
+    public function editRole()
+    {
+        // var_dump($this->input->post());
+        $id     = $this->input->post('xid');
+        $nama   = $this->input->post('xrole');
+        $ket    = $this->input->post('xketerangan');
+
+        $data = [
+            'role'          => htmlspecialchars($nama),
+            'keterangan'    => htmlspecialchars($ket)
+        ];
+
+        $this->db->where('role_id', $id);
+        $this->db->update('user_role', $data);
+    }
+
     public function setAccess($encryptedData)
     {
         $key = "G@ruda7577";
@@ -163,7 +197,6 @@ class Administrator extends CI_Controller
         }
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Access Changed!</div>');
     }
-
     public function simpanMenu()
     {
         $data = [
@@ -212,24 +245,5 @@ class Administrator extends CI_Controller
         $this->db->delete('user_menu');
 
         $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Menu sudah dihapus!</div>');
-    }
-
-    public function simpanRole()
-    {
-        
-        $data = [
-            'role' => $this->input->post('nrole'),
-            'keterangan' => $this->input->post('nketerangan')
-        ];
-
-        $result = $this->db->get_where('user_role', $data);
-
-        if($result->num_rows() > 0) {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Roles ini sudah ada!</div>');
-        } else {
-            $this->db->insert('user_role', $data);
-            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Role baru ditambahkan!</div>');
-        }
-
     }
 }

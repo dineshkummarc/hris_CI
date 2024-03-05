@@ -88,7 +88,7 @@ class Datakaryawan extends CI_Controller
                     // 'TXT_KONTRAK_4'                 => $this->input->post('kontrak-4-awal-tambah') . " || " . $this->input->post('kontrak-4-akhir-tambah'),
                     // 'TXT_KONTRAK_5'                 => $this->input->post('kontrak-5-awal-tambah') . " || " . $this->input->post('kontrak-5-akhir-tambah'),
                     'TXT_DIVISI'                    => $this->input->post('divisi-tambah'),
-                    'TXT_NAMA'                      => $this->input->post('nama-tambah'),
+                    'TXT_NAMA'                      => strtoupper($this->input->post('nama-tambah')),
                     'TXT_ALAMAT'                    => $this->input->post('alamat-tambah'),
                     'TXT_TELEPON'                   => $this->input->post('telepon-tambah'),
                     'TXT_KELAMIN'                   => $this->input->post('kelamin-tambah'),
@@ -116,6 +116,7 @@ class Datakaryawan extends CI_Controller
                     'TXT_NIK'                                    => $this->input->post('nik-tambah'),
                     'TXT_NPWP'                                   => $this->input->post('npwp-tambah'),
                     'TXT_PHOTO'                                  => $newName,
+                    'tgl_mulai_bekerja'                          => $this->input->post('tglmasuk'),
                     'role_id'                                    => $this->input->post('role'),
                     'rar_id'                                     => $this->input->post('accl')
                 );
@@ -312,7 +313,7 @@ class Datakaryawan extends CI_Controller
                 'email'     => $row->TXT_EMAIL,
                 'statusKontrak' => $statusPercobaan . " " . $statusKontrak1 . " " . $statusKontrak2 . " " . $statusKontrak3 . " " . $statusKontrak4 . " " . $statusKontrak5,
                 'act'       => $row->user_id,
-                'tlp'       => $row->TXT_TELEPON
+                'tlp'       => "+(62) " . $row->TXT_TELEPON
             );
         }
 

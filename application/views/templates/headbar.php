@@ -8,19 +8,17 @@
                 <li>
                     <span class="m-r-sm text-muted welcome-message text-uppercase"><?= $user['TXT_NAMA'] ?></span>
                 </li>
+                <li class="dropdown-divider"></li>
                 <li class="dropdown">
-                    <ul class="dropdown-menu dropdown-messages">
-                        
-                        <li class="dropdown-divider"></li>
-                        
-                    </ul>
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell"></i> <span class="label label-primary">0</span>
+                    </a>
                 </li>
                 <li>
-                <button class="btn logout text-danger">
+                    <button class="btn logout text-danger">
                         <i class="fa fa-sign-out"></i> LOG OUT
                     </button>
                 </li>
             </ul>
-
         </nav>
     </div>

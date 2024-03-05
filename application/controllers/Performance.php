@@ -34,6 +34,8 @@ class Performance extends CI_Controller
         $myData   = $this->db->get_where('tb_user', ['TXT_EMAIL' => $this->session->userdata('email')])->row_array();
         $function_name = __FUNCTION__;
 
+        $key = "G@ruda7577";
+
         $forb = $this->db->get_where('tb_akses_menu', ['divisi' => $myData['TXT_DIVISI'], 'menu' => $function_name])->row_array();
 
 
@@ -126,7 +128,7 @@ class Performance extends CI_Controller
             }
 
             if ($user == $row->TXT_NAMA_PEMBUAT) {
-                $button3 = '<button style="min-width:50px;" class="btn btn-xs btn-warning mt-1 hapus" data-id="' . $row->INT_ID_FORM . '"><i class="fa fa-trash"></i></button>';
+                $button3 = '<button style="min-width:50px;" class="btn btn-xs btn-warning mt-1 hapus" data-id="' . encrypt_data($row->INT_ID_FORM, $key) . '" data-name="' . encrypt_data($row->TXT_NAMA_KARYAWAN, $key) . '"><i class="fa fa-trash"></i></button>';
             }
 
             if ($row->TXT_SUDAH_MENILAI_1 != "0" && $row->TXT_SUDAH_MENILAI_2 != "0" && $row->TXT_SUDAH_MENILAI_3 != "0" && $row->TXT_SUDAH_MENILAI_4 != "0" && $forb['forbiden_status'] == '1') {
@@ -215,5 +217,45 @@ class Performance extends CI_Controller
         $this->pdf->filename = $namaKaryawan . ".pdf";
         $this->pdf->load_view('performance/iprDonwload', $data);
         // $this->load->view('performance/iprDonwload', $data);
+    }
+
+    function delete()
+    {
+        $key = "G@ruda7577";
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            show_404(); // Atau tindakan lain yang sesuai
+        }
+
+        // Ambil data POST dari body request
+        $input = json_decode(file_get_contents('php://input'), true);
+        if (!isset($input['id']) || !isset($input['karyawan'])) {
+            $response = array(
+                'status' => 'error',
+                'message' => 'Pastikan id form dan nama karyawan ada dalam request.'
+            );
+        } else {
+            $id     = decryptData($input['id'], $key);
+            $nama   = decryptData($input['karyawan'], $key);
+
+            $this->db->where('INT_ID_FORM', $id);
+            if ($this->db->delete('tb_form_penilaian_karyawan')) {
+                $this->db->where('INT_ID_FORM', $id);
+                $this->db->delete('tb_nilai_penilaian_karyawan');
+
+                $response = array(
+                    'status' => 'success',
+                    'message' => 'Anda berhasil menghapus form penilaian atas nama ' . $nama
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'message' => 'Kesalahan dalam Query.'
+                );
+            }
+        }
+
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($response));
     }
 }

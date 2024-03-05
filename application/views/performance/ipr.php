@@ -88,6 +88,52 @@
                     window.open("<?= base_url('performance/downloadIpr') ?>?id=" + idForm + "&nama=" + namaKaryawan, "_blank");
                 });
 
+                $('body').on('click', '#tb_ipr .hapus', async function() {
+                    const idForm = $(this).data('id');
+                    const namaKaryawan = $(this).data('name');
+                    Swal.fire({
+                        title: 'Hapus',
+                        text: 'Form ini akan dihapus secara permanen, yakin?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Ya',
+                        cancelButtonText: 'Tidak'
+                    }).then(async (resl) => {
+                        if (resl.isConfirmed) {
+                            try {
+                                const Url = "<?= base_url('performance/delete') ?>";
+
+                                const response = await fetch(Url, {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json", // Ubah header Content-Type
+                                    },
+                                    body: JSON.stringify({
+                                        id: idForm,
+                                        karyawan: namaKaryawan
+                                    }) // Ubah payload menjadi JSON string
+                                });
+                                if (!response.ok) {
+                                    throw new Error("HTTP error! status: " + response.status);
+                                }
+                                const resultText = await response.json();
+                                if (resultText.status === 'error') {
+                                    swalalertError(resultText.message);
+                                } else if (resultText.status === 'success') {
+                                    swalalertSuccess(resultText.message);
+                                }
+                            } catch (error) {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: error,
+                                    icon: 'error'
+                                })
+                                // console.error("ERROR : ", error);
+                            }
+                        }
+                    })
+                });
+
             })
             .catch(function(error) {
                 console.error(error);
