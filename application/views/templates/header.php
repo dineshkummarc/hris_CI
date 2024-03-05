@@ -32,11 +32,14 @@
 
     <link href="<?= base_url('assets/'); ?>css/plugins/toastr/toastr.min.css" rel="stylesheet">
 
+    <script src="<?= base_url() ?>/assets/js/plugins/chartJs/Chart.min.js"></script>
+    
     <script src="<?= base_url('assets/') ?>js/encrypt.js" crossorigin="anonymous"></script>
     <script src="<?= base_url('node_modules/');?>crypto-js/crypto-js.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script async src="<?= base_url() ?>/assets/js/jquery.peity.js"></script>
 
 </head>
 

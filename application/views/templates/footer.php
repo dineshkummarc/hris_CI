@@ -62,11 +62,17 @@
 <script src="https://unpkg.com/bootstrap-table@1.21.4/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
 <script src="https://unpkg.com/bootstrap-table@1.21.4/dist/extensions/auto-refresh/bootstrap-table-auto-refresh.min.js"></script>
 
+<script src="<?= base_url() ?>/assets/js/plugins/chartJs/Chart.min.js"></script>
+
 <script src="<?= base_url() ?>/assets/js/plugins/summernote/summernote-bs4.js"></script>
 
 <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+<script src="<?= base_url('assets/') ?>js/plugins/sparkline/jquery.sparkline.min.js"></script>
 
 <script src="<?= base_url('assets/'); ?>js/plugins/peity/jquery.peity.min.js"></script>
+<!-- <script src="<?= base_url() ?>/assets/js/demo/peity-demo.js"></script> -->
+<script src="<?= base_url() ?>/assets/js/jquery.peity.js"></script>
+<script src="<?= base_url() ?>/assets/js/jquery.peity.min.js"></script>
 
 <script src="<?= base_url('assets/'); ?>js/plugins/typehead/bootstrap3-typeahead.min.js"></script>
 

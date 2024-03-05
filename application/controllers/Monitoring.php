@@ -37,18 +37,29 @@ class Monitoring extends CI_Controller
             $sudah_menilai = 0;
 
             if ($row->TXT_SUDAH_MENILAI_1 == "0" || $row->TXT_SUDAH_MENILAI_1 == "-" || $row->TXT_SUDAH_MENILAI_1 == "AUTO") {
+                $centang1 = "";
+            } else {
                 $centang1 = '<i class="fa fa-check text-navy"></i>' . $sudah_menilai += 1;
             }
+
             if ($row->TXT_SUDAH_MENILAI_2 == "0" || $row->TXT_SUDAH_MENILAI_2 == "-" || $row->TXT_SUDAH_MENILAI_2 == "AUTO") {
+                $centang2 = "";
+            } else {
                 $centang2 = '<i class="fa fa-check text-navy"></i>' . $sudah_menilai += 1;
             }
             if ($row->TXT_SUDAH_MENILAI_3 == "0" || $row->TXT_SUDAH_MENILAI_3 == "-" || $row->TXT_SUDAH_MENILAI_3 == "AUTO") {
+                $centang3 = "";
+            } else {
                 $centang3 = '<i class="fa fa-check text-navy"></i>' . $sudah_menilai += 1;
             }
             if ($row->TXT_SUDAH_MENILAI_4 == "0" || $row->TXT_SUDAH_MENILAI_4 == "-" || $row->TXT_SUDAH_MENILAI_4 == "AUTO") {
+                $centang4="";
+            } else {
                 $centang4 = '<i class="fa fa-check text-navy"></i>' . $sudah_menilai += 1;
             }
             if ($row->TXT_SUDAH_MENILAI_5 == "0" || $row->TXT_SUDAH_MENILAI_5 == "-" || $row->TXT_SUDAH_MENILAI_5 == "AUTO") {
+                $centang5="";
+            } else {
                 $centang5 = '<i class="fa fa-check text-navy"></i>' . $sudah_menilai += 1;
             }
             $data[] = array(
@@ -61,7 +72,7 @@ class Monitoring extends CI_Controller
                 'penilai5'  => $row->TXT_PENILAI_5,
                 'pdari'     => $row->DATE_DARI,
                 'pakhir'    => $row->DATE_PERIODE,
-                'progress'  => '<span class="pie">' .$sudah_menilai . "/" . $row->INT_JUMLAH_PENILAI . '</span>',
+                'progress'  => '<span class="pie">' . $sudah_menilai . "/" . $row->INT_JUMLAH_PENILAI . '</span>',
                 'cek1'      => $centang1,
                 'cek2'      => $centang2,
                 'cek3'      => $centang3,
@@ -70,8 +81,6 @@ class Monitoring extends CI_Controller
             );
         }
 
-        $this->output
-            ->set_content_type('application/json')
-            ->set_output(json_encode($data));
+        echo json_encode($data);
     }
 }
