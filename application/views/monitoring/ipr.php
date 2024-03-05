@@ -5,12 +5,13 @@
 </div>
 <div class="wrapper wrapper-content">
     <div class="row">
-        <div class="col-lg-12">
-            <table id="table" class="table table-striped table-striped-columns" data-pagination="true" data-toggle="table" data-url="<?= base_url('monitoring/get_ipr') ?>" 
-            data-search="true" data-filter-control="true"
-            data-show-toggle="true"
-            data-check-on-init="true" data-show-search-clear-button="true" data-advanced-search="true" data-id-table="advancedTable" data-show-columns-toggle-all="true" data-show-columns="true" data-show-columns-toggle-all="true"
-            data-show-pagination-switch="true" data-buttons-align="left" data-buttons-class="danger">
+        <div class="col-lg-12" style="background-color:white; display:block">
+            <div id="toolbar">
+                <button class="btn btn-flat btn-danger create-form"><i class="fa fa-file"></i> Buat</button>
+                <button class="btn btn-flat btn-danger set_penilai_btn"><i class="fa fa-address-card-o"></i> Penilai</button>
+                <button class="btn btn-flat btn-danger set_periode"><i class="fa fa-clock-o"></i> Periode</button>
+            </div>
+            <table id="table" class="table table-striped table-striped-columns" data-toolbar="#toolbar" data-pagination="true" data-toggle="table" data-url="<?= base_url('monitoring/get_ipr') ?>" data-search="true" data-filter-control="true" data-show-toggle="true" data-check-on-init="true" data-show-search-clear-button="true" data-advanced-search="true" data-id-table="advancedTable" data-show-columns-toggle-all="true" data-show-columns="true" data-show-columns-toggle-all="true" data-show-pagination-switch="true" data-buttons-class="danger">
                 <thead class=" table-light">
                     <tr data-valign="midle">
                         <th rowspan="2" data-field="nama" data-filter-control="select">Nama Karyawan</th>
@@ -33,8 +34,8 @@
                         <th data-field="cek4"></th>
                         <th data-field="penilai5"></th>
                         <th data-field="cek5"></th>
-                        <th data-field="pdari" data-filter-control="select">Awal</th>
-                        <th data-field="pakhir">Akhir</th>
+                        <th data-field="pdari" data-filter-control="select"></th>
+                        <th data-field="pakhir"></th>
                     </tr>
                 </thead>
             </table>
