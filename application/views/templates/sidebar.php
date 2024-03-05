@@ -17,7 +17,7 @@ $encrypter = encrypt_data($user['user_id'], $keys);
                         <li><a class="dropdown-item" href="<?= base_url('dashboard/editProfil/') . $encrypter ?>"><i class="fa fa-user-circle"></i> <?= $user['TXT_NAMA'] ?></a></li>
                         <li><a class="dropdown-item" href="#"><i class="fa fa-envelope-square"></i> <?= $user['TXT_EMAIL'] ?></a></li>
                         <li class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="<?= base_url('auth/changepassword') ?>">Change Password</a>
+                        <li><a class="dropdown-item ubahPassword" data-id="<?= $user['user_id'] ?>" href="#">Change Password</a>
                     </ul>
                 </div>
                 <div class="logo-element">

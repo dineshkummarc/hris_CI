@@ -116,8 +116,8 @@ class Auth extends CI_Controller
 
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (isset($input["id"]) || isset($input["karyawan"])) {
-            $id = $input["id"];
+        if (isset($input["id"]) && isset($input["karyawan"])) {
+            $id = htmlspecialchars($input["id"]);
             $newPassword = password_hash($input['karyawan'], PASSWORD_DEFAULT);
 
             $this->db->set('password', $newPassword);

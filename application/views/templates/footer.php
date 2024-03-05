@@ -90,6 +90,56 @@
                 }
             })
         });
+
+        $(".ubahPassword").click(function() {
+            const id = $(this).data('id');
+            const Url = "<?= base_url('auth/changepassword') ?>";
+            Swal.fire({
+                title: 'Ubah password',
+                text: 'Silahkan input password baru anda',
+                icon: 'warning',
+                input: 'password',
+                inputAttributes: {
+                    autocapitalize: "off"
+                },
+                showCancelButton: true,
+                confirmButtonText: "Ubah",
+                showLoaderOnConfirm: true,
+                preConfirm: async (ubah) => {
+                    try {
+                        const url = Url; // Ganti URL_ANDA dengan URL yang sesuai
+                        const response = await fetch(url, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json", // Ubah header Content-Type
+                            },
+                            body: JSON.stringify({
+                                id: id,
+                                karyawan: ubah
+                            }) // Ubah payload menjadi JSON string
+                        });
+                        if (!response.ok) {
+                            throw new Error("HTTP error! status: " + response.status);
+                        }
+                        const resultText = await response.json();
+                        if (resultText.status === 'error') {
+                            swalalertError(resultText.message);
+                        } else if (resultText.status === 'success') {
+                            swalalertSuccess(resultText.message);
+                        }
+                    } catch (error) {
+                        Swal.fire({
+                            title: 'Error',
+                            text: error,
+                            icon: 'error'
+                        })
+                        // console.error("ERROR : ", error);
+                    }
+                }
+            });
+
+            document.querySelector(".swal2-input").placeholder = "Type new password";
+        })
     });
 </script>
 </body>
