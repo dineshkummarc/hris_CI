@@ -71,6 +71,7 @@
 
 <script src="<?= base_url('assets/'); ?>js/plugins/peity/jquery.peity.min.js"></script>
 <!-- <script src="<?= base_url() ?>/assets/js/demo/peity-demo.js"></script> -->
+<script src="<?= base_url('assets/') ?>js/plugins/chosen/chosen.jquery.js"></script>
 <script src="<?= base_url() ?>/assets/js/jquery.peity.js"></script>
 <script src="<?= base_url() ?>/assets/js/jquery.peity.min.js"></script>
 

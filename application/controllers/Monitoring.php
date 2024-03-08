@@ -20,7 +20,7 @@ class Monitoring extends CI_Controller
         $data['user']   = $this->db->get_where('tb_user', ['TXT_EMAIL' => $this->session->userdata('email')])->row_array();
         $data['rar']    = $this->db->get_where('role_access_rights', ['id' => $this->session->userdata('rar_id')])->row_array();
 
-        // $data['karyawan'] = $this->db->get_where('tb_user', ['is_active' => '1']);
+        $data['periode'] = $this->db->get_where('tb_periode', ['is_active' => '1']);
 
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar', $data);
@@ -103,5 +103,160 @@ class Monitoring extends CI_Controller
         }
 
         echo json_encode($data);
+    }
+
+    public function cekPenilai()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            show_404(); // Atau tindakan lain yang sesuai
+        }
+
+        $input      = json_decode(file_get_contents('php://input'), true);
+        $response   = array();
+
+        if (!isset($input['namaKar'])) {
+            $response = array(
+                'status'    => 'error',
+                'message'   => 'Pastikan nama karyawan ada dalam request.'
+            );
+        } else {
+            $namaKaryawan   = $input['namaKar'];
+
+            $dataPenilai    = $this->db->get_where('tb_penilai', ['TXT_NAMA_KARYAWAN' => $namaKaryawan]);
+            foreach ($dataPenilai->result() as $row) {
+                $response[] = array(
+                    'penilai1'  => $row->TXT_PENILAI_1,
+                    'penilai2'  => $row->TXT_PENILAI_2,
+                    'penilai3'  => $row->TXT_PENILAI_3,
+                    'penilai4'  => $row->TXT_PENILAI_4,
+                    'penilai5'  => $row->TXT_PENILAI_5
+                );
+            }
+        }
+
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($response));
+    }
+
+    public function cekPeriode()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            show_404(); // Atau tindakan lain yang sesuai
+        }
+
+        $input      = json_decode(file_get_contents('php://input'), true);
+        $response   = array();
+        if (!isset($input['id'])) {
+            $response = array(
+                'status'    => 'error',
+                'message'   => 'Pastikan nama karyawan ada dalam request.'
+            );
+        } else {
+            $idPeriode = $input['id'];
+
+            $dataPeriode = $this->db->get_where('tb_periode', ['INT_ID' => $idPeriode]);
+            foreach ($dataPeriode->result() as $row) {
+                $response[] = array(
+                    'awal'  => $row->DATE_DARI,
+                    'akhir' => $row->DATE_SAMPAI
+                );
+            }
+        }
+
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($response));
+    }
+
+    public function formPenilaian_save()
+    {
+        $penilai1s = $this->input->post('penilai-1');
+        $penilai2s = $this->input->post('penilai-2');
+        $penilai3s = $this->input->post('penilai-3');
+        $penilai4s = $this->input->post('penilai-4');
+        $penilai5s = $this->input->post('penilai-5');
+
+        $jumlahPenilai = 0;
+
+        // Memeriksa setiap input penilai
+        if (isset($penilai1s) && $penilai1s !== '') {
+            $jumlahPenilai++;
+        }
+        if (isset($penilai2s) && $penilai2s !== '') {
+            $jumlahPenilai++;
+        }
+        if (isset($penilai3s) && $penilai3s !== '') {
+            $jumlahPenilai++;
+        }
+        if (isset($penilai4s) && $penilai4s !== '') {
+            $jumlahPenilai++;
+        }
+        if (isset($penilai5s) && $penilai5s !== '') {
+            $jumlahPenilai++;
+        }
+
+
+        if ($this->input->post('penilai-1') == "") {
+            $sudah_menilai_1 = "AUTO";
+            $penilai1 = "-";
+        } else {
+            $sudah_menilai_1 = "0";
+            $penilai1 = $this->input->post('penilai-1');
+        }
+        if ($this->input->post('penilai-2') == "") {
+            $sudah_menilai_2 = "AUTO";
+            $penilai2 = "-";
+        } else {
+            $sudah_menilai_2 = "0";
+            $penilai2 = $this->input->post('penilai-2');
+        }
+        if ($this->input->post('penilai-3') == "") {
+            $sudah_menilai_3 = "AUTO";
+            $penilai3 = "-";
+        } else {
+            $sudah_menilai_3 = "0";
+            $penilai3 = $this->input->post('penilai-3');
+        }
+        if ($this->input->post('penilai-4') == "") {
+            $sudah_menilai_4 = "AUTO";
+            $penilai4 = "-";
+        } else {
+            $sudah_menilai_4 = "0";
+            $penilai4 = $this->input->post('penilai-4');
+        }
+        if ($this->input->post('penilai-5') == "") {
+            $sudah_menilai_5 = "AUTO";
+            $penilai5 = "-";
+        } else {
+            $sudah_menilai_5 = "0";
+            $penilai5 = $this->input->post('penilai-5');
+        }
+
+        // echo $jumlahPenilai; die();
+
+        $data = array(
+            'TXT_NAMA_PEMBUAT' => $this->session->userdata('nama_lengkap'),
+            'TXT_NAMA_KARYAWAN' => $this->input->post('nama-karyawan'),
+            'TXT_PENILAI_1' => $penilai1,
+            'TXT_PENILAI_2' => $penilai2,
+            'TXT_PENILAI_3' => $penilai3,
+            'TXT_PENILAI_4' => $penilai4,
+            'TXT_PENILAI_5' => $penilai5,
+            'INT_JUMLAH_PENILAI' => $jumlahPenilai,
+            'TXT_SUDAH_MENILAI_1' => $sudah_menilai_1,
+            'TXT_SUDAH_MENILAI_2' => $sudah_menilai_2,
+            'TXT_SUDAH_MENILAI_3' => $sudah_menilai_3,
+            'TXT_SUDAH_MENILAI_4' => $sudah_menilai_4,
+            'TXT_SUDAH_MENILAI_5' => $sudah_menilai_5,
+            'DATE_PERIODE' => $this->input->post('sampai'),
+            'DATE_DARI' => $this->input->post('dari'),
+            'id_periode'    => $this->input->post('periode_select')
+        );
+
+        $this->db->insert('tb_form_penilaian_karyawan', $data);
+
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Penilai untuk karyawan ' . $this->input->post('nama-karyawan') . ' telah dibuat!</div>');
+        redirect('monitoring/dataipr');
     }
 }
