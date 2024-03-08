@@ -275,7 +275,26 @@ class Monitoring extends CI_Controller
 
     public function newPeriod()
     {
+    }
 
+    public function periodeAction()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            show_404(); // Atau tindakan lain yang sesuai
+        }
+
+        $input  = json_decode(file_get_contents('php://input'), true);
+
+        if(!isset($input['id']) && !isset($input['action'])) {
+            $response = array(
+                'status'    => 'error',
+                'message'   => 'Pastikan ID dan Action ada dalam request.'
+            );
+        } else {
+            if($input['action'] == 'redup') {
+                
+            }
+        }
     }
 
     function ambilPeriode()
@@ -285,9 +304,8 @@ class Monitoring extends CI_Controller
         $this->db->order_by('DATE_DARI', "DESC");
         $dataPeriode = $this->db->get('tb_periode');
 
-        foreach($dataPeriode->result() AS $row)
-        {
-            if($row->is_active == '1') {
+        foreach ($dataPeriode->result() as $row) {
+            if ($row->is_active == '1') {
                 $status = '<span class="label label-info">Aktif</span>';
             } else {
                 $status = '<span class="label label-warning">Non-aktif</span>';
@@ -297,8 +315,8 @@ class Monitoring extends CI_Controller
                 'nama'  => $row->TXT_JENIS,
                 'awal'  => $row->DATE_DARI,
                 'akhir' => $row->DATE_SAMPAI,
-                'status'=> $status,
-                'active'=> $row->is_active
+                'status' => $status,
+                'active' => $row->is_active
             );
         }
 

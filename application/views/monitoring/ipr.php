@@ -251,6 +251,44 @@
                         }]
                     });
 
+                    $('body').on('click', '#tbperiode .menyala', function() {
+                        const id = $(this).data('id');
+
+                    });
+                    $('body').on('click', '#tbperiode .redup', function() {
+                        const id = $(this).data('id');
+                        const act = "redup";
+                        Swal.fire({
+                            title: 'Nonaktif',
+                            text: 'Nonaktifkan periode ini? Pastikan semua sudah dinilai dengan baik!',
+                            icon: 'question',
+                            showCancelButton: true,
+                            showLoaderOnConfirm: true,
+                            preConfirm: async (redup) => {
+                                try {
+                                    const Url = "<?= base_url('monitoring/periodeAction') ?>";
+                                    const response = await fetch(url, {
+                                        method: "POST",
+                                        headers: {
+                                            "Content-Type": "application/json",
+                                        },
+                                        body: JSON.stringify({
+                                            id: id,
+                                            action: act
+                                        }) 
+                                    });
+                                } catch (error) {
+                                    Swal.fire({
+                                        title: 'Error',
+                                        text: error,
+                                        icon: 'error'
+                                    })
+                                    // console.error("ERROR : ", error);
+                                }
+                            }
+                        })
+                    });
+
                 })
                 .catch(function(error) {
                     console.error(error);
