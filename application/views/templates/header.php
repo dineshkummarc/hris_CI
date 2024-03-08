@@ -31,6 +31,8 @@
     <link href="<?= base_url() ?>/assets/css/plugins/summernote/summernote-bs4.css" rel="stylesheet">
 
     <link href="<?= base_url('assets/'); ?>css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="<?= base_url('assets/') ?>css/plugins/select2/select2.min.css"> -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
     <script src="<?= base_url() ?>/assets/js/plugins/chartJs/Chart.min.js"></script>
     

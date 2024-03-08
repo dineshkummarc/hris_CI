@@ -27,4 +27,23 @@ class M_karyawan extends CI_Model
 
         return $query;
     }
+
+    public function cariNama($key = NULL)
+    {
+        // Kueri untuk mencari data karyawan berdasarkan nama atau divisi
+        $this->db->select('TXT_NAMA');
+        $this->db->from('tb_user');
+        if ($key != NULL) {
+            // Gunakan prepared statements untuk menghindari SQL Injection
+            $this->db->group_start();
+            $this->db->like('TXT_NAMA', $key);
+            $this->db->or_like('TXT_DIVISI', $key);
+            $this->db->group_end();
+        }
+        $this->db->where('is_active', '1');
+        $this->db->order_by('TXT_NAMA', 'ASC');
+
+        $result = $this->db->get();
+        return $result;
+    }
 }

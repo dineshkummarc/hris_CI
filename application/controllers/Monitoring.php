@@ -11,6 +11,7 @@ class Monitoring extends CI_Controller
         $this->staylogin->check_and_extend_session();
 
         $this->load->model("m_ipr");
+        $this->load->model("m_karyawan");
     }
 
     public function dataipr()
@@ -19,11 +20,31 @@ class Monitoring extends CI_Controller
         $data['user']   = $this->db->get_where('tb_user', ['TXT_EMAIL' => $this->session->userdata('email')])->row_array();
         $data['rar']    = $this->db->get_where('role_access_rights', ['id' => $this->session->userdata('rar_id')])->row_array();
 
+        // $data['karyawan'] = $this->db->get_where('tb_user', ['is_active' => '1']);
+
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar', $data);
         $this->load->view('templates/headbar', $data);
         $this->load->view('monitoring/ipr', $data);
         $this->load->view('templates/footer');
+    }
+
+    public function dataKar()
+    {
+        $katakunci = $this->input->post('cariNamaDevisi');
+        $dataCari = $this->m_karyawan->cariNama($katakunci);
+
+        $data = array();
+        foreach ($dataCari->result() as $row) {
+            $data[] = array(
+                'id'    => $row->TXT_NAMA,
+                'text' => $row->TXT_NAMA
+            );
+        }
+
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($data));
     }
 
     public function get_ipr()
@@ -53,12 +74,12 @@ class Monitoring extends CI_Controller
                 $centang3 = '<i class="fa fa-check text-navy"></i>' . $sudah_menilai += 1;
             }
             if ($row->TXT_SUDAH_MENILAI_4 == "0" || $row->TXT_SUDAH_MENILAI_4 == "-" || $row->TXT_SUDAH_MENILAI_4 == "AUTO") {
-                $centang4="";
+                $centang4 = "";
             } else {
                 $centang4 = '<i class="fa fa-check text-navy"></i>' . $sudah_menilai += 1;
             }
             if ($row->TXT_SUDAH_MENILAI_5 == "0" || $row->TXT_SUDAH_MENILAI_5 == "-" || $row->TXT_SUDAH_MENILAI_5 == "AUTO") {
-                $centang5="";
+                $centang5 = "";
             } else {
                 $centang5 = '<i class="fa fa-check text-navy"></i>' . $sudah_menilai += 1;
             }
