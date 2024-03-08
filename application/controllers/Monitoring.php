@@ -171,92 +171,139 @@ class Monitoring extends CI_Controller
 
     public function formPenilaian_save()
     {
-        $penilai1s = $this->input->post('penilai-1');
-        $penilai2s = $this->input->post('penilai-2');
-        $penilai3s = $this->input->post('penilai-3');
-        $penilai4s = $this->input->post('penilai-4');
-        $penilai5s = $this->input->post('penilai-5');
+        $this->form_validation->set_rules('penilai-1', 'Penilai-1', 'trim|required');
+        $this->form_validation->set_rules('penilai-2', 'Penilai-2', 'trim|required');
+        $this->form_validation->set_rules('penilai-3', 'Penilai-3', 'trim|required');
+        $this->form_validation->set_rules('nama-karyawan', 'Karyawan', 'trim|required');
+        $this->form_validation->set_rules('dari', 'Periode awal', 'trim|required');
+        $this->form_validation->set_rules('sampai', 'Periode akhir', 'trim|required');
 
-        $jumlahPenilai = 0;
+        if ($this->form_validation->run() == TRUE) {
+            # code...
+            $penilai1s = $this->input->post('penilai-1');
+            $penilai2s = $this->input->post('penilai-2');
+            $penilai3s = $this->input->post('penilai-3');
+            $penilai4s = $this->input->post('penilai-4');
+            $penilai5s = $this->input->post('penilai-5');
 
-        // Memeriksa setiap input penilai
-        if (isset($penilai1s) && $penilai1s !== '') {
-            $jumlahPenilai++;
-        }
-        if (isset($penilai2s) && $penilai2s !== '') {
-            $jumlahPenilai++;
-        }
-        if (isset($penilai3s) && $penilai3s !== '') {
-            $jumlahPenilai++;
-        }
-        if (isset($penilai4s) && $penilai4s !== '') {
-            $jumlahPenilai++;
-        }
-        if (isset($penilai5s) && $penilai5s !== '') {
-            $jumlahPenilai++;
-        }
+            $jumlahPenilai = 0;
+
+            // Memeriksa setiap input penilai
+            if (isset($penilai1s) && $penilai1s !== '') {
+                $jumlahPenilai++;
+            }
+            if (isset($penilai2s) && $penilai2s !== '') {
+                $jumlahPenilai++;
+            }
+            if (isset($penilai3s) && $penilai3s !== '') {
+                $jumlahPenilai++;
+            }
+            if (isset($penilai4s) && $penilai4s !== '') {
+                $jumlahPenilai++;
+            }
+            if (isset($penilai5s) && $penilai5s !== '') {
+                $jumlahPenilai++;
+            }
 
 
-        if ($this->input->post('penilai-1') == "") {
-            $sudah_menilai_1 = "AUTO";
-            $penilai1 = "-";
+            if ($this->input->post('penilai-1') == "") {
+                $sudah_menilai_1 = "AUTO";
+                $penilai1 = "-";
+            } else {
+                $sudah_menilai_1 = "0";
+                $penilai1 = $this->input->post('penilai-1');
+            }
+            if ($this->input->post('penilai-2') == "") {
+                $sudah_menilai_2 = "AUTO";
+                $penilai2 = "-";
+            } else {
+                $sudah_menilai_2 = "0";
+                $penilai2 = $this->input->post('penilai-2');
+            }
+            if ($this->input->post('penilai-3') == "") {
+                $sudah_menilai_3 = "AUTO";
+                $penilai3 = "-";
+            } else {
+                $sudah_menilai_3 = "0";
+                $penilai3 = $this->input->post('penilai-3');
+            }
+            if ($this->input->post('penilai-4') == "") {
+                $sudah_menilai_4 = "AUTO";
+                $penilai4 = "-";
+            } else {
+                $sudah_menilai_4 = "0";
+                $penilai4 = $this->input->post('penilai-4');
+            }
+            if ($this->input->post('penilai-5') == "") {
+                $sudah_menilai_5 = "AUTO";
+                $penilai5 = "-";
+            } else {
+                $sudah_menilai_5 = "0";
+                $penilai5 = $this->input->post('penilai-5');
+            }
+
+            // echo $jumlahPenilai; die();
+
+            $data = array(
+                'TXT_NAMA_PEMBUAT' => $this->session->userdata('nama_lengkap'),
+                'TXT_NAMA_KARYAWAN' => $this->input->post('nama-karyawan'),
+                'TXT_PENILAI_1' => $penilai1,
+                'TXT_PENILAI_2' => $penilai2,
+                'TXT_PENILAI_3' => $penilai3,
+                'TXT_PENILAI_4' => $penilai4,
+                'TXT_PENILAI_5' => $penilai5,
+                'INT_JUMLAH_PENILAI' => $jumlahPenilai,
+                'TXT_SUDAH_MENILAI_1' => $sudah_menilai_1,
+                'TXT_SUDAH_MENILAI_2' => $sudah_menilai_2,
+                'TXT_SUDAH_MENILAI_3' => $sudah_menilai_3,
+                'TXT_SUDAH_MENILAI_4' => $sudah_menilai_4,
+                'TXT_SUDAH_MENILAI_5' => $sudah_menilai_5,
+                'DATE_PERIODE' => $this->input->post('sampai'),
+                'DATE_DARI' => $this->input->post('dari'),
+                'id_periode'    => $this->input->post('periode_select')
+            );
+
+            $this->db->insert('tb_form_penilaian_karyawan', $data);
+
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Penilai untuk karyawan ' . $this->input->post('nama-karyawan') . ' telah dibuat!</div>');
+            redirect('monitoring/dataipr');
         } else {
-            $sudah_menilai_1 = "0";
-            $penilai1 = $this->input->post('penilai-1');
+            # code...
+            redirect('monitoring/dataipr');
         }
-        if ($this->input->post('penilai-2') == "") {
-            $sudah_menilai_2 = "AUTO";
-            $penilai2 = "-";
-        } else {
-            $sudah_menilai_2 = "0";
-            $penilai2 = $this->input->post('penilai-2');
-        }
-        if ($this->input->post('penilai-3') == "") {
-            $sudah_menilai_3 = "AUTO";
-            $penilai3 = "-";
-        } else {
-            $sudah_menilai_3 = "0";
-            $penilai3 = $this->input->post('penilai-3');
-        }
-        if ($this->input->post('penilai-4') == "") {
-            $sudah_menilai_4 = "AUTO";
-            $penilai4 = "-";
-        } else {
-            $sudah_menilai_4 = "0";
-            $penilai4 = $this->input->post('penilai-4');
-        }
-        if ($this->input->post('penilai-5') == "") {
-            $sudah_menilai_5 = "AUTO";
-            $penilai5 = "-";
-        } else {
-            $sudah_menilai_5 = "0";
-            $penilai5 = $this->input->post('penilai-5');
+    }
+
+    public function newPeriod()
+    {
+
+    }
+
+    function ambilPeriode()
+    {
+        $data = array();
+
+        $this->db->order_by('DATE_DARI', "DESC");
+        $dataPeriode = $this->db->get('tb_periode');
+
+        foreach($dataPeriode->result() AS $row)
+        {
+            if($row->is_active == '1') {
+                $status = '<span class="label label-info">Aktif</span>';
+            } else {
+                $status = '<span class="label label-warning">Non-aktif</span>';
+            }
+            $data[] = array(
+                'id'    => $row->INT_ID,
+                'nama'  => $row->TXT_JENIS,
+                'awal'  => $row->DATE_DARI,
+                'akhir' => $row->DATE_SAMPAI,
+                'status'=> $status,
+                'active'=> $row->is_active
+            );
         }
 
-        // echo $jumlahPenilai; die();
-
-        $data = array(
-            'TXT_NAMA_PEMBUAT' => $this->session->userdata('nama_lengkap'),
-            'TXT_NAMA_KARYAWAN' => $this->input->post('nama-karyawan'),
-            'TXT_PENILAI_1' => $penilai1,
-            'TXT_PENILAI_2' => $penilai2,
-            'TXT_PENILAI_3' => $penilai3,
-            'TXT_PENILAI_4' => $penilai4,
-            'TXT_PENILAI_5' => $penilai5,
-            'INT_JUMLAH_PENILAI' => $jumlahPenilai,
-            'TXT_SUDAH_MENILAI_1' => $sudah_menilai_1,
-            'TXT_SUDAH_MENILAI_2' => $sudah_menilai_2,
-            'TXT_SUDAH_MENILAI_3' => $sudah_menilai_3,
-            'TXT_SUDAH_MENILAI_4' => $sudah_menilai_4,
-            'TXT_SUDAH_MENILAI_5' => $sudah_menilai_5,
-            'DATE_PERIODE' => $this->input->post('sampai'),
-            'DATE_DARI' => $this->input->post('dari'),
-            'id_periode'    => $this->input->post('periode_select')
-        );
-
-        $this->db->insert('tb_form_penilaian_karyawan', $data);
-
-        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Penilai untuk karyawan ' . $this->input->post('nama-karyawan') . ' telah dibuat!</div>');
-        redirect('monitoring/dataipr');
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($data));
     }
 }

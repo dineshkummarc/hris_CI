@@ -13,7 +13,7 @@
 <div class="wrapper wrapper-content">
     <div class="row">
         <?= $this->session->flashdata('message'); ?>
-        <div class="col-lg-12 animated animate fadeIn" style="background-color:white; display:block" id="monitor">
+        <div class="col-lg-12 animated animated fadeIn" style="background-color:white; display:block" id="monitor">
             <table id="table" class="table table-striped table-striped-columns animated fadeInRightBig" data-pagination="true" data-toggle="table" data-url="<?= base_url('monitoring/get_ipr') ?>" data-search="true" data-filter-control="true" data-show-toggle="true" data-check-on-init="true" data-show-search-clear-button="true" data-advanced-search="true" data-id-table="advancedTable" data-show-columns-toggle-all="true" data-show-columns="true" data-show-columns-toggle-all="true" data-show-pagination-switch="true" data-buttons-class="danger">
                 <thead class=" table-light">
                     <tr data-valign="midle">
@@ -100,13 +100,13 @@
                             <?= form_error('periode_select', '<small class="text-danger pl-3">', '</small>'); ?>
                         </div>
                         <div class="form-group" id="data_1">
-                            <label class="font-normal"> Dari </label>
+                            <label class="font-normal" for="dari"> Dari </label>
                             <div class="input-group date">
                                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input id="dari" name="dari" type="text" class="form-control" value="" readonly>
                             </div>
                         </div>
                         <div class="form-group" id="data_2">
-                            <label class="font-normal"> Sampai </label>
+                            <label class="font-normal" for="sampai"> Sampai </label>
                             <div class="input-group date">
                                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input id="sampai" type="text" name="sampai" class="form-control" value="" readonly>
                             </div>
@@ -118,27 +118,149 @@
                 </form>
             </div>
         </div>
+        <div class="col-lg-12 d-none" id="periodsViews">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="ibox animated fadeInUpBig">
+                        <div class="ibox-title">
+                            <h5>Buat periode baru</h5>
+                        </div>
+                        <form action="<?= base_url('monitoring/newPeriod') ?>" method="POST">
+                            <div class="ibox-content">
+                                <div class="form-group" id="jenis_periode">
+                                    <label class="font-normal" for="jenis_periode">Nama Periode</label>
+                                    <input autocomplete="off" id="jenis_periode" name="jenis_periode" type="text" placeholder="ex: Semester II - 2024" class="form-control">
+                                </div>
+                                <div class="form-group" id="data_3">
+                                    <label class="font-normal" for="dari_set">Dari</label>
+                                    <div class="input-group date">
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input autocomplete="off" id="dari_set" name="dari_set" type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group" id="data_4">
+                                    <label class="font-normal" for="sampai_set">Sampai</label>
+                                    <div class="input-group date">
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input autocomplete="off" name="sampai_set" id="sampai_set" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ibox-footer">
+                                <button type="submit" class="btn btn-block btn-danger"><i class="fa fa-solid fa-save"></i> Simpan</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="ibox animated fadeInRightBig">
+                        <div class="ibox-title">
+                            <h5>Table data periode</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a id="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            <table id="tbperiode">
+
+                            </table>
+                        </div>
+                        <div class="ibox-footer">
+                            <button class="btn btn-secondary" id="tutup">Close tab</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <script async>
     $(document).ready(function() {
         const viewTable = $("#monitor");
         const viewFormPenilai = $("#form-penilai");
+        const periodeView = $("#periodsViews");
 
         $(".create-form").on('click', function() {
             viewTable.addClass("d-none");
             viewFormPenilai.removeClass("d-none");
+            periodeView.addClass("d-none");
         });
 
         $("#close-link").on('click', function() {
             viewTable.removeClass("d-none");
             viewFormPenilai.addClass("d-none");
+            periodeView.addClass("d-none");
+        });
+        $("#tutup").click(function() {
+            viewTable.removeClass("d-none");
+            viewFormPenilai.addClass("d-none");
+            periodeView.addClass("d-none");
+        });
+
+        $(".set_periode").on('click', function() {
+            viewTable.addClass("d-none");
+            viewFormPenilai.addClass("d-none");
+            periodeView.removeClass("d-none");
+
+            // buat table
+            $('#tbperiode').bootstrapTable('destroy');
+            axios.get("<?= base_url('monitoring/ambilPeriode') ?>")
+                .then(function(response) {
+                    var res = response.data;
+
+                    $table = $("#tbperiode").bootstrapTable({
+                        data: res,
+                        search: true,
+                        pagination: true,
+                        filterControl: true,
+                        columns: [{
+                            field: 'nama',
+                            title: 'Nama Periode'
+                        }, {
+                            field: 'awal',
+                            title: 'Awal',
+                            sortable: true
+                        }, {
+                            field: 'akhir',
+                            title: 'Akhir',
+                            sortable: true
+                        }, {
+                            field: 'status',
+                            title: 'status',
+                            align: 'center',
+                            sortable: true,
+                            filterControl: 'select'
+                        }, {
+                            field: 'active',
+                            title: 'Act.',
+                            align: 'center',
+                            formatter: function(value, row) {
+                                if (value === '0') {
+                                    return [
+                                        '<button class="btn btn-xs btn-info menyala" data-id="' + row.id + '"><i class="fa fa-check"></i></button>'
+                                    ]
+                                } else if (value === '1') {
+                                    return [
+                                        '<button class="btn btn-xs btn-danger redup" data-id="' + row.id + '"><i class="fa fa-trash"></i></button>'
+                                    ]
+                                }
+                            }
+                        }]
+                    });
+
+                })
+                .catch(function(error) {
+                    console.error(error);
+                });
         });
 
         $(".karyawan").select2({
             allowClear: true,
             width: '100%',
-            placeholder: "--Silahkan Nama Karyawan --",
+            placeholder: "-- Silahkan Nama Karyawan --",
             width: 'resolve',
             ajax: {
                 url: "<?= base_url('monitoring/dataKar') ?>",
