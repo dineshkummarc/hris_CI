@@ -285,16 +285,57 @@ class Monitoring extends CI_Controller
 
         $input  = json_decode(file_get_contents('php://input'), true);
 
-        if(!isset($input['id']) && !isset($input['action'])) {
+        if (!isset($input['id']) && !isset($input['action'])) {
             $response = array(
                 'status'    => 'error',
                 'message'   => 'Pastikan ID dan Action ada dalam request.'
             );
         } else {
-            if($input['action'] == 'redup') {
-                
+            if ($input['action'] == 'redup') {
+                $this->db->where('INT_ID', $input['id']);
+                $this->db->set('is_active', '0');
+                if ($this->db->update('tb_periode')) {
+                    $response = array(
+                        'status'    => 'success',
+                        'message'   => 'Periode ini sudah dinonaktifkan.'
+                    );
+                } else {
+                    $response = array(
+                        'status'    => 'error',
+                        'message'   => 'Kesalahan pada system, hubungi IT.'
+                    );
+                }
+            } elseif ($input['action'] == 'menyala') {
+                $username = $this->session->userdata('username');
+                $cekAuth = $this->db->get_where('tb_user', ['username' => $username])->row_array();
+
+                if (password_verify($input['pass'], $cekAuth['password'])) {
+
+                    $this->db->where('INT_ID', $input['id']);
+                    $this->db->set('is_active', '1');
+                    if ($this->db->update('tb_periode')) {
+                        $response = array(
+                            'status'    => 'success',
+                            'message'   => 'Periode ini sudah diaktifkan kembali.'
+                        );
+                    } else {
+                        $response = array(
+                            'status'    => 'error',
+                            'message'   => 'Kesalahan pada system, hubungi IT.'
+                        );
+                    }
+                } else {
+                    $response = array(
+                        'status'    => 'error',
+                        'message'   => 'Salah password, anda tidak punya akses!.'
+                    );
+                }
             }
         }
+
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($response));
     }
 
     function ambilPeriode()

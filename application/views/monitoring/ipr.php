@@ -253,6 +253,53 @@
 
                     $('body').on('click', '#tbperiode .menyala', function() {
                         const id = $(this).data('id');
+                        const act = "menyala"; //menyala abangkuhhh!!!
+                        Swal.fire({
+                            title: 'Aktivasi',
+                            text: 'Aktifkan periode ini kembali? Masukkan password anda terlebih dahulu!',
+                            icon: 'question',
+                            input: 'password',
+                            inputAttributes: {
+                                autocomplete: "off",
+                                autocapitalize: "off",
+                            },
+                            showCancelButton: true,
+                            showLoaderOnConfirm: true,
+                            preConfirm: async (menyala) => {
+                                try {
+                                    const Url = "<?= base_url('monitoring/periodeAction') ?>";
+                                    const response = await fetch(Url, {
+                                        method: "POST",
+                                        headers: {
+                                            "Content-Type": "application/json",
+                                        },
+                                        body: JSON.stringify({
+                                            id: id,
+                                            action: act,
+                                            pass: menyala
+                                        })
+                                    });
+                                    if (!response.ok) {
+                                        throw new Error("HTTP error! status: " + response.status);
+                                    }
+                                    const resultText = await response.json();
+                                    // console.log(resultText);
+                                    if (resultText.status === 'error') {
+                                        swalalertError(resultText.message);
+                                    } else if (resultText.status === 'success') {
+                                        swalalertSuccess(resultText.message);
+                                    }
+                                } catch (error) {
+                                    Swal.fire({
+                                        title: 'Error',
+                                        text: error,
+                                        icon: 'error'
+                                    })
+                                    // console.error("ERROR : ", error);
+                                }
+                            }
+                        });
+                        document.querySelector(".swal2-input").placeholder = "Type your password";
 
                     });
                     $('body').on('click', '#tbperiode .redup', function() {
@@ -267,7 +314,7 @@
                             preConfirm: async (redup) => {
                                 try {
                                     const Url = "<?= base_url('monitoring/periodeAction') ?>";
-                                    const response = await fetch(url, {
+                                    const response = await fetch(Url, {
                                         method: "POST",
                                         headers: {
                                             "Content-Type": "application/json",
@@ -275,15 +322,25 @@
                                         body: JSON.stringify({
                                             id: id,
                                             action: act
-                                        }) 
+                                        })
                                     });
+                                    if (!response.ok) {
+                                        throw new Error("HTTP error! status: " + response.status);
+                                    }
+                                    const resultText = await response.json();
+                                    // console.log(resultText);
+                                    if (resultText.status === 'error') {
+                                        swalalertError(resultText.message);
+                                    } else if (resultText.status === 'success') {
+                                        swalalertSuccess(resultText.message);
+                                    }
                                 } catch (error) {
                                     Swal.fire({
                                         title: 'Error',
                                         text: error,
                                         icon: 'error'
                                     })
-                                    // console.error("ERROR : ", error);
+                                    console.error("ERROR : ", error);
                                 }
                             }
                         })
