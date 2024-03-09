@@ -10,6 +10,11 @@
         </div>
     </div>
 </div>
+<style>
+    .select2-container {
+        width: 100% !important;
+    }
+</style>
 <div class="wrapper wrapper-content">
     <div class="row">
         <?= $this->session->flashdata('message'); ?>
@@ -59,9 +64,10 @@
                 </div>
                 <form action="<?= base_url('monitoring/formPenilaian_save') ?>" method="POST">
                     <div class="ibox-content">
+                        <button class="btn btn-primary mb-3 btn-sm buatSekaligus">Pilih Semua</button>
                         <div class="form-group">
                             <label for="nama-karyawan">Nama Karyawan</label>
-                            <select name="nama-karyawan" id="nama-karyawan" class="karyawan form-control">
+                            <select name="nama-karyawan" id="nama-karyawan" class="select2-container form-control">
                                 <option value="<?= set_value('nama-karyawan') ?>" <?php if (set_value('nama-karyawan') != NULL) : ?> selected <?php endif ?>><?= set_value('nama-karyawan') ?></option>
                             </select>
                             <?= form_error('nama-karyawan', '<small class="text-danger pl-3">', '</small>'); ?>
@@ -178,29 +184,147 @@
                 </div>
             </div>
         </div>
+        <div class="col-lg-12 d-none" id="PenilaiTableForm">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="ibox animated fadeInDownBig">
+                        <div class="ibox-title text-center">
+                            <h2 class="text-center">Set Penilai</h2>
+                            <p class="text-sm-center"><small>Form set karyawan dan penilai untuk digunakan secara sekaligus.</small></p>
+                        </div>
+                        <form action="<?= base_url('monitoring/setPenilai') ?>" method="POST" id="formPenilais">
+                            <div class="ibox-content">
+                                <div class="form-group">
+                                    <label class="font-normal" for="karyawan-set">Karyawan</label>
+                                    <select id="karyawan-set" name="karyawan-set" class="form-control select2-container">
+                                        <option value="">Pilih Karyawan</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="font-normal" for="penilai1-set">Penilai 1</label>
+                                    <select id="penilai1-set" name="penilai1-set" data-placeholder="Pilih penilai 1" class="form-control select2-container" tabindex="2" required>
+                                        <option value="">Pilih Penilai-1</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="font-normal" for="penilai2-set">Penilai 2</label>
+                                    <select id="penilai2-set" name="penilai2-set" data-placeholder="Pilih penilai 2" class="form-control select2-container" tabindex="2" required>
+                                        <option value="">Pilih Penilai-2</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="font-normal" for="penilai3-set">Penilai 3</label>
+                                    <select id="penilai3-set" name="penilai3-set" data-placeholder="Pilih penilai 3" class="form-control select2-container" tabindex="2" required>
+                                        <option value="">Pilih Penilai-3</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="font-normal" for="penilai4-set">Penilai 4</label>
+                                    <select id="penilai4-set" name="penilai4-set" data-placeholder="Pilih penilai 4" class="form-control select2-container" tabindex="2" required>
+                                        <option value="-">Pilih</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="font-normal" for="penilai4-set">Penilai 5</label>
+                                    <select id="penilai5-set" name="penilai5-set" data-placeholder="Pilih penilai 5" class="form-control select2-container" tabindex="2">
+                                        <option value="-">Pilih</option>
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="ibox-footer">
+                                <button type="button" class="btn btn-sm btn-warning cekForm">Validasi</button>
+                                <button type="submit" class="btn btn-sm btn-success float-right simpan" disabled>Simpan</button>
+                                <p class="mt-3"><small><sup class="text-danger">*</sup> `Validasi` terlebih dahulu sebelum simpan</small></p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="ibox animated fadeInRightBig">
+                        <div class="ibox-title text-center">
+                            <h2 class="text-center">LIST KARYAWAB & PENILAI</h2>
+                            <p class="text-sm-center"><small>List dari karyawan dan penilai yang sudah diset untuk digunakan secara sekaligus.</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <script async>
     $(document).ready(function() {
+        function cek_sama(nama) {
+            var temp = [];
+            for (let index = 0; index < nama.length; index++) {
+                if (temp.includes(nama[index])) {
+                    return true;
+                }
+                if (nama[index] !== "1") {
+                    temp.push(nama[index]);
+                }
+            }
+            return false;
+        }
+        $(".cekForm").click(function() {
+            var karyawan = $("#karyawan-set").val();
+            var pen1 = $("#penilai1-set").val();
+            var pen2 = $("#penilai2-set").val();
+            var pen3 = $("#penilai3-set").val();
+            var pen4 = $("#penilai4-set").val();
+            var pen5 = $("#penilai5-set").val();
+
+            var KarPen = [];
+            KarPen.push(karyawan);
+            KarPen.push(pen1);
+            KarPen.push(pen2);
+            KarPen.push(pen3);
+            KarPen.push(pen4);
+            KarPen.push(pen5);
+
+            console.log(KarPen);
+            if (cek_sama(KarPen)) {
+                Swal.fire({
+                    title: 'Validasi Form',
+                    text: 'Terdapat nama yang sama antara Karyawan - penilai',
+                    icon: 'warning'
+                });
+            } else {
+                $(".simpan").removeAttr("disabled");
+            }
+        });
+    });
+    $(document).ready(function() {
         const viewTable = $("#monitor");
         const viewFormPenilai = $("#form-penilai");
         const periodeView = $("#periodsViews");
+        const penilaiTF = $("#PenilaiTableForm");
 
         $(".create-form").on('click', function() {
             viewTable.addClass("d-none");
             viewFormPenilai.removeClass("d-none");
             periodeView.addClass("d-none");
+            penilaiTF.addClass("d-none");
         });
+
+        $(".set_penilai_btn").on('click', function() {
+            viewTable.addClass("d-none");
+            viewFormPenilai.addClass("d-none");
+            periodeView.addClass("d-none");
+            penilaiTF.removeClass("d-none");
+        })
 
         $("#close-link").on('click', function() {
             viewTable.removeClass("d-none");
             viewFormPenilai.addClass("d-none");
             periodeView.addClass("d-none");
+            penilaiTF.addClass("d-none");
         });
         $("#tutup").click(function() {
             viewTable.removeClass("d-none");
             viewFormPenilai.addClass("d-none");
             periodeView.addClass("d-none");
+            penilaiTF.addClass("d-none");
         });
 
         $(".set_periode").on('click', function() {
@@ -355,11 +479,9 @@
                 });
         });
 
-        $(".karyawan").select2({
+        $(".select2-container").select2({
             allowClear: true,
-            width: '100%',
             placeholder: "-- Silahkan Nama Karyawan --",
-            width: 'resolve',
             ajax: {
                 url: "<?= base_url('monitoring/dataKar') ?>",
                 type: 'POST',
@@ -383,6 +505,10 @@
         $('.chosen-select').chosen({
             width: "100%"
         });
+
+        $('.buatSekaligus').on('click', function() {
+            $('#modalBuatSekaligus').modal('show');
+        })
 
         $("#nama-karyawan").on('change', async function() {
             const namaKaryawan = $(this).val();

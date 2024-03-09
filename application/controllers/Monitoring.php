@@ -319,6 +319,7 @@ class Monitoring extends CI_Controller
 
         } else {
             # code...
+            $this->session->set_flashdata('message', '<div class="alert alert-warning" role="alert">Tidak ada Periode baru yang telah dibuat!</div>');
             redirect('monitoring/dataipr');
         }
         
@@ -411,5 +412,29 @@ class Monitoring extends CI_Controller
         $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode($data));
+    }
+
+    public function setPenilai()
+    {
+        
+        $this->form_validation->set_rules('karyawan-set', 'Nama Karyawan', 'trim|required');
+        $this->form_validation->set_rules('penilai1-set', 'Penilai - 1', 'trim|required');
+        $this->form_validation->set_rules('penilai2-set', 'Penilai - 2', 'trim|required');
+        $this->form_validation->set_rules('penilai3-set', 'Penilai - 3', 'trim|required');
+        
+        if ($this->form_validation->run() == TRUE ) {
+            # code...
+            $karyawan = $this->input->post('karyawan-set');
+            $penilai1 = $this->input->post('penilai1-set');
+            $penilai2 = $this->input->post('penilai2-set');
+            $penilai3 = $this->input->post('penilai3-set');
+            $penilai4 = $this->input->post('penilai4-set');
+            $penilai5 = $this->input->post('penilai5-set');
+
+            $data = [
+                'TXT_NAMA_KARYAWAN';
+            ];
+        } 
+        
     }
 }
