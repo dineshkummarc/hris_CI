@@ -130,17 +130,20 @@
                                 <div class="form-group" id="jenis_periode">
                                     <label class="font-normal" for="jenis_periode">Nama Periode</label>
                                     <input autocomplete="off" id="jenis_periode" name="jenis_periode" type="text" placeholder="ex: Semester II - 2024" class="form-control">
+                                    <?= form_error('jenis_periode', '<small class="text-danger pl-3">', '</small>'); ?>
                                 </div>
                                 <div class="form-group" id="data_3">
                                     <label class="font-normal" for="dari_set">Dari</label>
                                     <div class="input-group date">
                                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input autocomplete="off" id="dari_set" name="dari_set" type="text" class="form-control">
+                                        <?= form_error('dari_set', '<small class="text-danger pl-3">', '</small>'); ?>
                                     </div>
                                 </div>
                                 <div class="form-group" id="data_4">
                                     <label class="font-normal" for="sampai_set">Sampai</label>
                                     <div class="input-group date">
                                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input autocomplete="off" name="sampai_set" id="sampai_set" type="text" class="form-control">
+                                        <?= form_error('sampai_set', '<small class="text-danger pl-3">', '</small>'); ?>
                                     </div>
                                 </div>
                             </div>

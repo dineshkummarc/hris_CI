@@ -273,8 +273,55 @@ class Monitoring extends CI_Controller
         }
     }
 
+    private function _urutanPeriode()
+    {
+        $this->load->model("m_ipr");
+        $durt = $this->m_ipr->getUrutanPeriode();
+
+        foreach ($durt->result() as $row) {
+            $urutan = $row->idArr;
+            $urutan = (int)$urutan + 1;
+            $user_id = "PR" . date('ym') . "-" . sprintf("%04s", $urutan);
+        }
+
+        return $user_id;
+    }
+
     public function newPeriod()
     {
+        
+        $this->form_validation->set_rules('jenis_periode', 'Nama Periode', 'trim|required|min_length[12]', [
+            'min_length'    => "Nama periode terlalu pendek"
+        ]);
+        
+        $this->form_validation->set_rules('dari_set', 'Awal Periode', 'trim|required');
+        $this->form_validation->set_rules('sampai_set', 'Akhir Periode', 'trim|required');
+        
+        
+        if ($this->form_validation->run() == TRUE) {
+            # code...
+            $namaPeriode    = $this->input->post('jenis_periode');
+            $dari           = date("Y-m-d",strtotime($this->input->post('dari_set')));
+            $sampai         = date("Y-m-d",strtotime($this->input->post('sampai_set')));
+            // var_dump($sampai);
+
+            $data = [
+                'INT_ID'    => $this->_urutanPeriode(),
+                'TXT_JENIS' => $namaPeriode,
+                'DATE_DARI' => $dari,
+                'DATE_SAMPAI'   => $sampai
+            ];
+
+            $this->db->insert('tb_periode', $data);
+
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Periode baru telah dibuat!</div>');
+            redirect('monitoring/dataipr');
+
+        } else {
+            # code...
+            redirect('monitoring/dataipr');
+        }
+        
     }
 
     public function periodeAction()

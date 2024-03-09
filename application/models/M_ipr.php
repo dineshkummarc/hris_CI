@@ -43,14 +43,15 @@ class M_ipr extends CI_Model
 
     public function ambilKomen($id, $keyword, $penilai)
     {
-        // $this->db->select('TXT_INDIKATOR_NILAI_PENILAI')
-        //     ->from('tb_nilai_penilaian_karyawan')
-        //     ->like('INT_ID_FORM', $id)
-        //     ->like('TXT_INDIKATOR_NILAI_PENILAI', $keyword)
-        //     ->like('TXT_INDIKATOR_NILAI_PENILAI');
-        // $result = $this->db->get();
-        // return $result;
         $query = $this->db->query('SELECT TXT_INDIKATOR_NILAI_PENILAI FROM tb_nilai_penilaian_karyawan WHERE  INT_ID_FORM =  "' . $id . '" AND TXT_INDIKATOR_NILAI_PENILAI LIKE "%' . $keyword . '%" AND TXT_INDIKATOR_NILAI_PENILAI LIKE "%' . $penilai . '%" ');
+        return $query;
+    }
+
+    public function getUrutanPeriode()
+    {
+        $sql    = "SELECT MAX(kode) AS idArr FROM (SELECT CAST(urutan AS INT) AS kode FROM (SELECT SUBSTRING(INT_ID, 8) AS urutan FROM tb_periode WHERE YEAR(DATE_DARI) = '" . date('Y') . "') AS tabel_a) AS table_b;";
+        $query  = $this->db->query($sql);
+
         return $query;
     }
 }
